@@ -1,0 +1,12 @@
+Warcraft Audi — Akunda's Blessing (quest 50913)
+Russian quest text: World of Warcraft / Blizzard Entertainment.
+Text reference: https://www.wowhead.com/ru/quest=50913&xml
+Quest identity reference: WoW-Pro Guides, BFA_Voldun.lua, quest 50913.
+Speech generated locally using Silero Models v5_ru, eugene voice.
+Silero Team: https://github.com/snakers4/silero-models
+Model: https://models.silero.ai/models/tts/ru/v5_ru.pt
+Model license: CC BY-NC-SA 4.0
+https://github.com/snakers4/silero-models/blob/master/LICENSE
+Processing: SSML slow/low delivery, mono OGG Vorbis, loudness normalization.
+This is a synthetic audition voice, not an original Blizzard voice recording.
+The player's name is omitted; the description selects male/female grammar.

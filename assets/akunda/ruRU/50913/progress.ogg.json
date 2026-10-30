@@ -1,0 +1,16 @@
+{
+  "input": {
+    "text": "Я благословляю своих последователей.",
+    "profile": "loa",
+    "settings": {
+      "speaker": "eugene",
+      "rate": "slow",
+      "pitch": "low"
+    },
+    "model_sha256": "7ba04d42340fe0398042eed2e0d12d62e23096d626b1b9feff4dcb1309197ab4",
+    "sample_rate": 48000,
+    "encoder": "libvorbis-q5-loudnorm-18-v1"
+  },
+  "audio_sha256": "418aa18bea2b113eb4ccdb05ffa3d31e93d727493b8f9475c8a60619c6aa0a91",
+  "source": "https://models.silero.ai/models/tts/ru/v5_ru.pt"
+}

@@ -1,0 +1,9 @@
+## Interface: 100207
+## Title: Warcraft Audi
+## Notes: Quest voice playback and text collection for Dragonflight 10.2.7
+## Notes-ruRU: Озвучка квестов и сбор текстов для Dragonflight 10.2.7
+## Author: Warcraft Audi contributors
+## Version: 0.2.0
+## SavedVariables: WarcraftAudiDB
+Core.lua
+UI.lua

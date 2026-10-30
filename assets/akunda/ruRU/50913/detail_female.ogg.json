@@ -1,0 +1,16 @@
+{
+  "input": {
+    "text": "Ты хорошо себя проявила и показала достойной моего благословения.\n\nЕсли выберешь меня своим лоа, то сможешь взывать к моей силе в случае нужды.\n\nПросто подойди к алтарю и прими мой дар.\n\nНо знай: что бы ты ни выбрала, тебе всегда будут рады в этих стенах.",
+    "profile": "loa",
+    "settings": {
+      "speaker": "eugene",
+      "rate": "slow",
+      "pitch": "low"
+    },
+    "model_sha256": "7ba04d42340fe0398042eed2e0d12d62e23096d626b1b9feff4dcb1309197ab4",
+    "sample_rate": 48000,
+    "encoder": "libvorbis-q5-loudnorm-18-v1"
+  },
+  "audio_sha256": "31c08e712a48343abe7e63963b616ff889bd7f174d423e07c76f625fb1c9de23",
+  "source": "https://models.silero.ai/models/tts/ru/v5_ru.pt"
+}

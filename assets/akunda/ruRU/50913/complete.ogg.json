@@ -1,0 +1,16 @@
+{
+  "input": {
+    "text": "Если захочешь получить мой дар, обратись ко мне в святилище, построенном в мою честь.",
+    "profile": "loa",
+    "settings": {
+      "speaker": "eugene",
+      "rate": "slow",
+      "pitch": "low"
+    },
+    "model_sha256": "7ba04d42340fe0398042eed2e0d12d62e23096d626b1b9feff4dcb1309197ab4",
+    "sample_rate": 48000,
+    "encoder": "libvorbis-q5-loudnorm-18-v1"
+  },
+  "audio_sha256": "94853fd1c756134fd48666384c95db6416e96dc698b62cac15ff06ec79fa46b7",
+  "source": "https://models.silero.ai/models/tts/ru/v5_ru.pt"
+}
