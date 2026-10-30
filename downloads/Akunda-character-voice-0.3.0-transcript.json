@@ -1,0 +1,6 @@
+{
+  "engine": "openai/whisper-base",
+  "transcript": " Ты хорошо себя проявил и показал достойным моего благословения. Просто подойди к алтарю и примей мой дар.",
+  "expected": "Ты хорошо себя проявил и показал достойным моего благословения. Просто подойди к алтарю и прими мой дар.",
+  "note": "Independent automatic transcription; artistic fit and pronunciation still require listening."
+}

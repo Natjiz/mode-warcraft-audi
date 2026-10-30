@@ -1,5 +1,9 @@
 # Warcraft Audi
 
+**[Новая проба голоса огромного лоа — MP3, 9 секунд](https://github.com/Natjiz/mode-warcraft-audi/raw/refs/heads/main/downloads/Akunda-character-voice-0.3.0.mp3)**.
+Это отдельная проба тембра, а не обновление игрового пакета.
+[Карточка персонажа и способ генерации](docs/AKUNDA_VOICE_DESIGN.md).
+
 Новая проба более массивного голоса Акунды: [послушать](https://github.com/Natjiz/mode-warcraft-audi/raw/refs/heads/main/downloads/Akunda-voice-0.2.1.mp3),
 [скачать сборку 0.2.1](https://github.com/Natjiz/mode-warcraft-audi/raw/refs/heads/main/downloads/WarcraftAudi-0.2.1-Akunda.zip).
 Исходная рабочая озвучка сохранена для сравнения. [Описание изменений](docs/AKUNDA_VOICE.md).

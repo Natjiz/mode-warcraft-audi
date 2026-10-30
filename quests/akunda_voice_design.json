@@ -1,0 +1,10 @@
+{
+  "npc_id": 128152,
+  "character": "Акунда — лоа грозы, огромный громовой ящер",
+  "model": "Qwen/Qwen3-TTS-12Hz-1.7B-VoiceDesign",
+  "revision": "5ecdb67327fd37bb2e042aab12ff7391903235d3",
+  "language": "Russian",
+  "seed": 41,
+  "text": "Ты хорошо себя проявил и показал достойным моего благословения. Просто подойди к алтарю и прими мой дар.",
+  "instruct": "A very deep, gravelly male voice with the physical weight of an enormous ancient thunder-lizard deity. Rough, coarse, vibrating throat texture and heavy chest resonance. Calm, imposing authority rather than aggression. Deliberate natural pacing, native Russian pronunciation, crisp consonants and clearly articulated words. The rasp should be part of the voice, not electronic distortion. Dry clean recording without echoes, music or background sounds."
+}
