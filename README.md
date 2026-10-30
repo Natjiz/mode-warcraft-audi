@@ -1,5 +1,10 @@
 # Warcraft Audi
 
+**[Скачать готовый ZIP с озвучкой Акунды](https://github.com/Natjiz/mode-warcraft-audi/raw/refs/heads/main/downloads/WarcraftAudi-0.2.0-Akunda.zip)**
+
+Закройте WoW, распакуйте обе папки из архива в `Interface/AddOns`, включите оба
+аддона и введите `/wca demo`. Это установочный архив; собирать проект не нужно.
+
 Аддон для **WoW Circle Dragonflight 10.2.7**, Interface `100207`.
 **Версия 0.2.0 содержит готовые речевые файлы для одного квеста:
 «Благословение Акунды», ID 50913.** Озвучены выдача, прогресс и завершение.
