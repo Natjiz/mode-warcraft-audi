@@ -1,0 +1,73 @@
+{
+  "items": [
+    {
+      "request": {
+        "quest_id": 50913,
+        "stage": "detail",
+        "locale": "ruRU",
+        "gender": "male",
+        "npc_id": 128152,
+        "text": "Ты хорошо себя проявил и показал достойным моего благословения. Если выберешь меня своим лоа, то сможешь взывать к моей силе в случае нужды. Просто подойди к алтарю и прими мой дар. Но знай: что бы ты ни выбрал, тебе всегда будут рады в этих стенах.",
+        "speaker": "Акунда",
+        "npc_race": "",
+        "npc_type": "",
+        "npc_gender": ""
+      },
+      "file": "assets/akunda_streamed/detail_male.ogg",
+      "sha256": "ad74fe6118ecfb135c633315e61cd8bf0f704e06700bb443b509b12ae3db7938",
+      "mime": "audio/ogg"
+    },
+    {
+      "request": {
+        "quest_id": 50913,
+        "stage": "detail",
+        "locale": "ruRU",
+        "gender": "female",
+        "npc_id": 128152,
+        "text": "Ты хорошо себя проявила и показала достойной моего благословения. Если выберешь меня своим лоа, то сможешь взывать к моей силе в случае нужды. Просто подойди к алтарю и прими мой дар. Но знай: что бы ты ни выбрала, тебе всегда будут рады в этих стенах.",
+        "speaker": "Акунда",
+        "npc_race": "",
+        "npc_type": "",
+        "npc_gender": ""
+      },
+      "file": "assets/akunda_streamed/detail_female.ogg",
+      "sha256": "6cefbdc695863a265ebfe2387339ac4025a65e1a5619e08a709dd5c74fe42289",
+      "mime": "audio/ogg"
+    },
+    {
+      "request": {
+        "quest_id": 50913,
+        "stage": "progress",
+        "locale": "ruRU",
+        "gender": "unknown",
+        "npc_id": 128152,
+        "text": "Я благословляю своих последователей.",
+        "speaker": "Акунда",
+        "npc_race": "",
+        "npc_type": "",
+        "npc_gender": ""
+      },
+      "file": "assets/akunda_streamed/progress.ogg",
+      "sha256": "5315a13c6af020860be02e2871a9c24305c83df62e346a8b4236b25af0536f84",
+      "mime": "audio/ogg"
+    },
+    {
+      "request": {
+        "quest_id": 50913,
+        "stage": "complete",
+        "locale": "ruRU",
+        "gender": "unknown",
+        "npc_id": 128152,
+        "text": "Если захочешь получить мой дар, обратись ко мне в святилище, построенном в мою честь.",
+        "speaker": "Акунда",
+        "npc_race": "",
+        "npc_type": "",
+        "npc_gender": ""
+      },
+      "file": "assets/akunda_streamed/complete.ogg",
+      "sha256": "f73468b08db641683acafc8fb2e84d133927e7faece8f0441b4bf498bf705dc8",
+      "mime": "audio/ogg"
+    }
+  ],
+  "engine_revision": "c2035f7bf2ebae0af43a534aa523f236a314e6d1836adf8923e763150f63c24e"
+}

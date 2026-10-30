@@ -11,9 +11,19 @@ function methods:Hide() self.visible = false end
 function methods:SetText(text) self.text = text end
 function methods:SetEnabled(enabled) self.enabled = enabled end
 function methods:CreateFontString() return CreateFrame("FontString") end
+function methods:CreateTexture()
+    local texture = CreateFrame("Texture")
+    self.textures = self.textures or {}
+    self.textures[#self.textures + 1] = texture
+    return texture
+end
 for _, name in ipairs({ "SetSize", "SetPoint", "SetFrameStrata", "SetClampedToScreen", "SetMovable", "EnableMouse", "RegisterForDrag", "StartMoving", "StopMovingOrSizing", "SetBackdrop", "SetBackdropBorderColor", "SetWidth", "SetJustifyH", "SetMultiLine", "SetFontObject", "SetAutoFocus", "SetMaxLetters", "SetScrollChild", "SetFocus", "HighlightText" }) do
     methods[name] = function() end
 end
+function methods:SetAllPoints() end
+function methods:SetColorTexture(r, g, b, a) self.color = {r, g, b, a} end
+function methods:SetPoint(...) self.point = {...} end
+function methods:SetSize(w, h) self.width, self.height = w, h end
 function CreateFrame(kind, name, parent, template)
     local frame = setmetatable({ scripts = {}, events = {} }, { __index = methods })
     if template == "BasicFrameTemplateWithInset" then frame.TitleText = CreateFrame("FontString") end
@@ -45,5 +55,5 @@ function StopSound(handle)
     mock.playing[handle] = false
 end
 C_Sound = { IsPlaying = function(handle) return mock.playing[handle] == true end }
-function fire(event, argument) WarcraftAudi.events.scripts.OnEvent(WarcraftAudi.events, event, argument) end
+function fire(event, argument, success) WarcraftAudi.events.scripts.OnEvent(WarcraftAudi.events, event, argument, success) end
 function tick(seconds) WarcraftAudi.events.scripts.OnUpdate(WarcraftAudi.events, seconds) end

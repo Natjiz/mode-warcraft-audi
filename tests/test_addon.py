@@ -19,7 +19,7 @@ class AddonTests(unittest.TestCase):
         self.load_addon()
 
     def load_addon(self):
-        for file in ("Core.lua", "UI.lua"):
+        for file in ("Core.lua", "UI.lua", "Bridge.lua"):
             code = (ROOT / "addon" / "WarcraftAudi" / file).read_text()
             self.lua.execute("return function(...)\n" + code + "\nend")("WarcraftAudi", self.lua.globals().namespace)
         self.lua.execute('fire("ADDON_LOADED", "WarcraftAudi")')
@@ -80,6 +80,15 @@ class AddonTests(unittest.TestCase):
     def test_gender_specific_voice_selection_and_generic_fallback(self):
         self.register_voice()
         self.run_lua('assert(WarcraftAudi:RegisterPack("Female", {{questID=42, locale="ruRU", stage="detail", gender="female", files={"female.ogg"}}})); mock.sex = 3; fire("QUEST_DETAIL"); assert(mock.calls[1].path == "female.ogg"); mock.sex = 2; fire("QUEST_DETAIL"); assert(mock.calls[2].path == "a.ogg")')
+
+    def test_selected_log_quest_can_be_read_without_an_npc(self):
+        self.run_lua('C_QuestLog = {GetSelectedQuest=function() return 77 end, GetTitleForQuestID=function() return "Журнал" end}; GetQuestLogQuestText=function() return "Текст из журнала" end; SlashCmdList.WARCRAFTAUDI("companion"); SlashCmdList.WARCRAFTAUDI("read"); assert(WarcraftAudi.current.quest_id == 77); assert(WarcraftAudi.current.npc_id == 0); assert(#mock.calls == 0)')
+        payload = json.loads(self.lua.eval('WarcraftAudi.bridge.message'))
+        self.assertEqual(payload['text'], 'Текст из журнала')
+        self.assertEqual(payload['speaker'], 'Рассказчик')
+
+    def test_delayed_quest_log_load_never_reads_a_different_selection(self):
+        self.run_lua('mock.selected = 77; C_QuestLog = {GetSelectedQuest=function() return mock.selected end, GetTitleForQuestID=function() return "Журнал" end, RequestLoadQuestByID=function(id) mock.requested=id end}; GetQuestLogQuestText=function() return mock.loaded and "Готовый текст" or "" end; SlashCmdList.WARCRAFTAUDI("companion"); SlashCmdList.WARCRAFTAUDI("read"); assert(mock.requested == 77); mock.selected=88; mock.loaded=true; fire("QUEST_DATA_LOAD_RESULT",77,true); assert(WarcraftAudi.current == nil); SlashCmdList.WARCRAFTAUDI("read"); assert(WarcraftAudi.current.quest_id == 88)')
 
 
 if __name__ == "__main__":

@@ -1,0 +1,10 @@
+{
+  "npc_id": 128152,
+  "name": "Акунда",
+  "voice_version": "akunda-approved-0.3.0",
+  "appearance": "Акунда — лоа грозы, огромный громовой ящер",
+  "reference": "downloads/Akunda-character-voice-0.3.0.mp3",
+  "reference_sha256": "12a229ceb2b53baf5e074a4e39a5989357abaa50e10a845661bf3e3ec6a7a7f4",
+  "reference_text": "Ты хорошо себя проявил и показал достойным моего благословения. Просто подойди к алтарю и прими мой дар.",
+  "approved": true
+}

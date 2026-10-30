@@ -48,7 +48,7 @@ function A:UpdateUI()
         title:SetText(self.current.title .. " · " .. (names[self.current.stage] or "") .. "\n" .. self.current.speaker)
     else title:SetText("Откройте диалог квеста у NPC.") end
     status:SetText(self.status or "Подключите голосовой пакет для воспроизведения.")
-    play:SetEnabled(self:GetVoice() ~= nil)
+    play:SetEnabled(self:GetVoice() ~= nil or (self.db and self.db.settings.companion and self.current ~= nil) or false)
     auto:SetText("Авто: " .. (self.db and self.db.settings.autoPlay and "вкл" or "выкл"))
 end
 

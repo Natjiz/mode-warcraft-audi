@@ -1,6 +1,6 @@
 local addonName, A = ...
 WarcraftAudi = A
-A.version = "0.2.0"
+A.version = "0.4.0"
 A.voices = {}
 local stages = { QUEST_DETAIL = "detail", QUEST_PROGRESS = "progress", QUEST_COMPLETE = "complete" }
 local getters = { detail = GetQuestText, progress = GetProgressText, complete = GetRewardText }
@@ -47,12 +47,14 @@ function A:GetVoice()
 end
 
 function A:Stop()
+    self.pendingQuest = nil
     -- Clear ownership before StopSound: a completion callback must not advance this queue.
     local handle = self.soundHandle
     if handle or self.queue then self.status = "Остановлено" end
     self.soundHandle, self.queue, self.queueIndex = nil, nil, nil
     self.pollElapsed = 0
     if handle then StopSound(handle, 150) end
+    if self.BridgeEvent then self:BridgeEvent("stop") end
     self:Refresh()
 end
 
@@ -81,6 +83,12 @@ end
 function A:Play()
     self:Stop()
     if not self.current then return end
+    if self.db.settings.companion and self.BridgeEvent then
+        self:BridgeEvent("play")
+        self.status = "Передано внешней программе озвучки"
+        self:Refresh()
+        return
+    end
     local entry = self:GetVoice()
     if not entry then
         self.status = "Для этого текста ещё нет записи. Он доступен в экспорте."
@@ -93,6 +101,12 @@ end
 
 function A:Demo()
     self:Stop()
+    if self.db.settings.companion and self.BridgeEvent then
+        self:BridgeEvent("demo")
+        self.status = "Проба передана внешней программе"
+        self:Refresh()
+        return
+    end
     self.queue = { "Interface\\AddOns\\WarcraftAudi\\Audio\\demo.ogg" }
     self.queueIndex = 0
     if self.panel then self.panel:Show() end
@@ -110,11 +124,18 @@ function A:OnQuest(stage)
     if type(questID) ~= "number" or questID <= 0 then return end
     local locale = GetLocale()
     local text = clean(getters[stage]())
-    local speaker = UnitName("npc") or UnitName("questnpc") or UnitName("target") or "Неизвестный NPC"
+    local speaker = UnitName("npc") or UnitName("questnpc") or "Рассказчик"
     local guid = UnitGUID("npc") or UnitGUID("questnpc")
     local npcID = guid and tonumber((select(6, strsplit("-", guid)))) or nil
     local key = locale .. ":" .. questID .. ":" .. stage
     self.current = { key = key, questID = questID, stage = stage, title = clean(GetTitleText()), speaker = speaker }
+    self.current.quest_id, self.current.locale, self.current.text = questID, locale, text
+    self.current.npc_id = npcID
+    self.current.gender = UnitSex("player") == 3 and "female" or "male"
+    self.current.player_name = UnitName("player")
+    self.current.npc_race = UnitRace and UnitRace("npc") or ""
+    self.current.npc_type = UnitCreatureType and UnitCreatureType("npc") or ""
+    self.current.npc_gender = UnitSex("npc") == 3 and "female" or UnitSex("npc") == 2 and "male" or "unknown"
     if self.db.settings.collect and text ~= "" then
         self.db.collected[key] = {
             quest_id = questID, locale = locale, stage = stage, text = text,
@@ -124,7 +145,8 @@ function A:OnQuest(stage)
     self.status = self:GetVoice() and "Запись найдена" or "Записи пока нет"
     self:Refresh()
     if self.panel then self.panel:Show() end
-    if self.db.settings.autoPlay then self:Play() end
+    if self.db.settings.autoPlay then self:Play()
+    elseif self.db.settings.companion and self.BridgeEvent then self:BridgeEvent("select") end
 end
 
 local function quote(value)
@@ -134,6 +156,31 @@ local function quote(value)
         return string.format("\\u%04x", string.byte(char))
     end)
     return '"' .. escaped .. '"'
+end
+A.JSONQuote = quote
+
+function A:ReadSelectedQuest(loaded)
+    self:Stop()
+    self.current = nil
+    local questID = C_QuestLog and C_QuestLog.GetSelectedQuest and C_QuestLog.GetSelectedQuest()
+    if not questID or questID <= 0 then self:Notify("Сначала выберите квест в журнале."); return end
+    local text = GetQuestLogQuestText and clean(GetQuestLogQuestText()) or ""
+    if text == "" then
+        if not loaded and C_QuestLog.RequestLoadQuestByID then
+            self.pendingQuest = questID
+            C_QuestLog.RequestLoadQuestByID(questID)
+            self.status = "Загружаю текст выбранного квеста"
+            self:Refresh()
+        else self:Notify("Текст этого квеста недоступен в журнале.") end
+        return
+    end
+    local locale = GetLocale()
+    self.current = { key = locale .. ":" .. questID .. ":detail", questID = questID, quest_id = questID,
+        locale = locale, stage = "detail", text = text, title = clean(C_QuestLog.GetTitleForQuestID(questID)),
+        speaker = "Рассказчик", npc_id = 0, npc_race = "", npc_type = "", npc_gender = "unknown",
+        gender = UnitSex("player") == 3 and "female" or "male", player_name = UnitName("player") }
+    if self.panel then self.panel:Show() end
+    self:Play()
 end
 
 function A:ExportJSON()
@@ -171,7 +218,7 @@ frame:SetScript("OnUpdate", function(_, elapsed)
     end
 end)
 
-frame:SetScript("OnEvent", function(_, event, name)
+frame:SetScript("OnEvent", function(_, event, name, success)
     if event == "ADDON_LOADED" then
         if name ~= addonName then return end
         WarcraftAudiDB = WarcraftAudiDB or {}
@@ -182,7 +229,14 @@ frame:SetScript("OnEvent", function(_, event, name)
         if A.db.settings.collect == nil then A.db.settings.collect = true end
         A.db.schemaVersion = 1
         A:Refresh()
-    elseif event == "QUEST_FINISHED" then
+    elseif event == "QUEST_DATA_LOAD_RESULT" and A.pendingQuest == name then
+        A.pendingQuest = nil
+        if success and C_QuestLog.GetSelectedQuest() == name then A:ReadSelectedQuest(true)
+        else
+            A.status = success and "Выбор квеста изменился; чтение отменено" or "Не удалось загрузить текст квеста"
+            A:Refresh()
+        end
+    elseif event == "QUEST_FINISHED" or event == "PLAYER_LEAVING_WORLD" then
         A:Stop()
         A.current = nil
         if A.panel then A.panel:Hide() end
@@ -190,7 +244,7 @@ frame:SetScript("OnEvent", function(_, event, name)
         A:OnQuest(stages[event])
     end
 end)
-for _, event in ipairs({ "ADDON_LOADED", "QUEST_DETAIL", "QUEST_PROGRESS", "QUEST_COMPLETE", "QUEST_FINISHED" }) do
+for _, event in ipairs({ "ADDON_LOADED", "QUEST_DETAIL", "QUEST_PROGRESS", "QUEST_COMPLETE", "QUEST_FINISHED", "PLAYER_LEAVING_WORLD", "QUEST_DATA_LOAD_RESULT" }) do
     frame:RegisterEvent(event)
 end
 
@@ -201,12 +255,14 @@ SlashCmdList.WARCRAFTAUDI = function(command)
     if not A.db then return end
     if command == "play" then A:Play()
     elseif command == "demo" then A:Demo()
+    elseif command == "read" then A:ReadSelectedQuest()
     elseif command == "stop" then A:Stop(); A.status = "Остановлено"; A:Refresh()
     elseif command == "auto" then A:ToggleAuto()
     elseif command == "export" then A:ShowExport()
     elseif command == "collect" then
         A.db.settings.collect = not A.db.settings.collect
         A:Notify("Сбор текстов: " .. (A.db.settings.collect and "включён" or "выключен"))
+    elseif command == "companion" then A:ToggleCompanion()
     elseif command == "" then A.panel:Show()
-    else A:Notify("/wca — панель; demo — проба голоса; play — повтор; stop — стоп; auto — автозапуск; export — тексты; collect — сбор текстов.") end
+    else A:Notify("/wca — панель; companion — внешняя программа; read — читать выбранный квест в журнале; demo — проба; play — повтор; stop — стоп; auto — автозапуск; export — тексты; collect — сбор текстов.") end
 end
