@@ -33,7 +33,9 @@ def build_addon(output: Path, with_demo: bool = False) -> None:
                 archive.write(path, str(path.relative_to(ROOT / "addon")))
 
 
-def build_pack(source: Path, audio_root: Path, name: str, output: Path) -> int:
+def build_pack(source: Path, audio_root: Path, name: str, output: Path, version: str = "0.2.0") -> int:
+    if not re.fullmatch(r"\d+\.\d+\.\d+", version):
+        raise ValueError("Version must have the form major.minor.patch.")
     if not re.fullmatch(r"[A-Za-z][A-Za-z0-9_]{0,63}", name):
         raise ValueError("Pack name must start with a Latin letter and contain only letters, digits or underscores (max 64).")
     document = json.loads(source.read_text(encoding="utf-8"))
@@ -95,7 +97,7 @@ def build_pack(source: Path, audio_root: Path, name: str, output: Path) -> int:
     )
     toc = (
         f"## Interface: 100207\n## Title: Warcraft Audi: {name}\n"
-        "## Version: 0.2.0\n## Dependencies: WarcraftAudi\nVoices.lua\n"
+        f"## Version: {version}\n## Dependencies: WarcraftAudi\nVoices.lua\n"
     )
     output.parent.mkdir(parents=True, exist_ok=True)
     with zipfile.ZipFile(output, "w", zipfile.ZIP_DEFLATED) as archive:

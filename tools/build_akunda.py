@@ -44,13 +44,24 @@ INSTALL = """Warcraft Audi 0.2.0 — Благословение Акунды
 """
 
 
-def build(output: Path) -> None:
-    audio_root = ROOT / "assets" / "akunda"
+def build(output: Path, variant: str = "original") -> None:
+    mature = variant == "mature"
+    version = "0.2.1" if mature else "0.2.0"
+    collection = "akunda_mature" if mature else "akunda"
+    profile = "akunda_mature" if mature else "loa"
+    attribution = ATTRIBUTION
+    if mature:
+        attribution = attribution.replace("eugene voice", "aidar voice").replace(
+            "SSML slow/low delivery", "SSML low delivery, subtle pitch/formant shift, gentle EQ/compression")
+    install = INSTALL.replace("0.2.0", version)
+    if mature:
+        install += "\nВерсия 0.2.1 — новая проба голоса Акунды. Замените прежние папки аддонов; не устанавливайте второй перекрывающийся пакет.\n"
+    audio_root = ROOT / "assets" / collection
     manifest = audio_root / "manifest.json"
     document = json.loads(manifest.read_text(encoding="utf-8"))
     rows = document["quests"]
-    source = json.loads((ROOT / "quests" / "akunda_ruRU.json").read_text(encoding="utf-8"))
-    expected = [row for row, _, _ in plan_quests(source, "loa")]
+    source = json.loads((ROOT / "quests" / f"{collection}_ruRU.json").read_text(encoding="utf-8"))
+    expected = [row for row, _, _ in plan_quests(source, profile)]
     if rows != expected:
         raise ValueError("Recorded manifest does not match the current quest source; regenerate it.")
     for row in rows:
@@ -65,16 +76,17 @@ def build(output: Path) -> None:
     demo = ROOT / "addon" / "WarcraftAudi" / "Audio" / "demo.ogg"
     recording = audio_root / "ruRU" / "50913" / "detail_male.ogg"
     demo.parent.mkdir(parents=True, exist_ok=True)
-    if demo.exists() and sha256(demo) != sha256(recording):
+    if not mature and demo.exists() and sha256(demo) != sha256(recording):
         raise ValueError("Existing demo differs; preserve it before choosing another demo.")
-    if not demo.exists():
+    if not mature and not demo.exists():
         shutil.copyfile(recording, demo)
-    (demo.parent / "ATTRIBUTION.txt").write_text(ATTRIBUTION, encoding="utf-8")
+    if not mature:
+        (demo.parent / "ATTRIBUTION.txt").write_text(attribution, encoding="utf-8")
     output.parent.mkdir(parents=True, exist_ok=True)
     with tempfile.TemporaryDirectory(dir=output.parent) as temporary:
         work = Path(temporary)
         build_addon(work / "base.zip", with_demo=True)
-        if build_pack(manifest, audio_root, "Akunda_ruRU", work / "voices.zip") != 4:
+        if build_pack(manifest, audio_root, "Akunda_ruRU", work / "voices.zip", version=version) != 4:
             raise ValueError("Expected four Akunda recordings, including both description variants.")
         combined = work / "bundle.zip"
         with zipfile.ZipFile(combined, "w", zipfile.ZIP_DEFLATED) as destination:
@@ -85,19 +97,26 @@ def build(output: Path) -> None:
                         if info.filename in names:
                             raise ValueError(f"Duplicate archive path: {info.filename}")
                         names.add(info.filename)
-                        destination.writestr(info, source_zip.read(info.filename))
-            destination.writestr(f"{PACK}/ATTRIBUTION.txt", ATTRIBUTION)
-            destination.writestr("INSTALL-RU.txt", INSTALL)
+                        data = source_zip.read(info.filename)
+                        if info.filename == "WarcraftAudi/Audio/demo.ogg":
+                            data = recording.read_bytes()
+                        elif info.filename == "WarcraftAudi/Audio/ATTRIBUTION.txt":
+                            data = attribution.encode("utf-8")
+                        destination.writestr(info, data)
+            destination.writestr(f"{PACK}/ATTRIBUTION.txt", attribution)
+            destination.writestr("INSTALL-RU.txt", install)
         combined.replace(output)
     print(f"Built audible addon and quest pack: {output}")
 
 
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--output", type=Path, default=ROOT / "dist" / "WarcraftAudi-0.2.0-Akunda.zip")
+    parser.add_argument("--variant", choices=("original", "mature"), default="original")
+    parser.add_argument("--output", type=Path)
     args = parser.parse_args()
     try:
-        build(args.output)
+        version = "0.2.1" if args.variant == "mature" else "0.2.0"
+        build(args.output or ROOT / "dist" / f"WarcraftAudi-{version}-Akunda.zip", args.variant)
     except (ValueError, OSError, KeyError) as exc:
         parser.exit(1, f"Error: {exc}\n")
 

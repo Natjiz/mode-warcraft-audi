@@ -1,0 +1,17 @@
+{
+  "input": {
+    "text": "Я благословляю своих последователей.",
+    "profile": "akunda_mature",
+    "settings": {
+      "speaker": "aidar",
+      "rate": "medium",
+      "pitch": "low",
+      "postprocess": "rubberband=tempo=0.97:pitch=0.94:formant=shifted,highpass=f=65,equalizer=f=160:t=q:w=0.9:g=1.2,equalizer=f=2700:t=q:w=0.9:g=1,acompressor=threshold=0.15:ratio=1.5:attack=20:release=150:makeup=1"
+    },
+    "model_sha256": "7ba04d42340fe0398042eed2e0d12d62e23096d626b1b9feff4dcb1309197ab4",
+    "sample_rate": 48000,
+    "encoder": "libvorbis-q5-loudnorm-18-v1"
+  },
+  "audio_sha256": "07705b30751abbd1ec55af4052220690129b31aa2de160a266ba48db419cb38e",
+  "source": "https://models.silero.ai/models/tts/ru/v5_ru.pt"
+}

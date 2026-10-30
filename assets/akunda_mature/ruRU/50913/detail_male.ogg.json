@@ -1,0 +1,17 @@
+{
+  "input": {
+    "text": "Ты хорошо себя проявил и показал достойным моего благословения.\n\nЕсли выберешь меня своим лоа, то сможешь взывать к моей силе в случае нужды.\n\nПросто подойди к алтарю и прими мой дар.\n\nНо знай: что бы ты ни выбрал, тебе всегда будут рады в этих стенах.",
+    "profile": "akunda_mature",
+    "settings": {
+      "speaker": "aidar",
+      "rate": "medium",
+      "pitch": "low",
+      "postprocess": "rubberband=tempo=0.97:pitch=0.94:formant=shifted,highpass=f=65,equalizer=f=160:t=q:w=0.9:g=1.2,equalizer=f=2700:t=q:w=0.9:g=1,acompressor=threshold=0.15:ratio=1.5:attack=20:release=150:makeup=1"
+    },
+    "model_sha256": "7ba04d42340fe0398042eed2e0d12d62e23096d626b1b9feff4dcb1309197ab4",
+    "sample_rate": 48000,
+    "encoder": "libvorbis-q5-loudnorm-18-v1"
+  },
+  "audio_sha256": "64b526a5d381c85850b3b8e05562523f3a9659d61a5d056878c74f6ed2bc2681",
+  "source": "https://models.silero.ai/models/tts/ru/v5_ru.pt"
+}

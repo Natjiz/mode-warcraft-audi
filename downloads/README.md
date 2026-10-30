@@ -1,5 +1,16 @@
 # Готовая сборка
 
+## Новая проба голоса 0.2.1
+
+[Послушать новый голос](https://github.com/Natjiz/mode-warcraft-audi/raw/refs/heads/main/downloads/Akunda-voice-0.2.1.mp3)
+· [Старый голос для сравнения](https://github.com/Natjiz/mode-warcraft-audi/raw/refs/heads/main/downloads/Akunda-voice-0.2.0.mp3)
+
+[Скачать ZIP с новым голосом](https://github.com/Natjiz/mode-warcraft-audi/raw/refs/heads/main/downloads/WarcraftAudi-0.2.1-Akunda.zip).
+Это проба более массивной подачи для Акунды. Замените прежние папки, перезапустите
+клиент и используйте `/wca demo`. Рабочая сборка 0.2.0 ниже сохранена.
+
+## Исходная сборка 0.2.0
+
 [Скачать WarcraftAudi-0.2.0-Akunda.zip](https://github.com/Natjiz/mode-warcraft-audi/raw/refs/heads/main/downloads/WarcraftAudi-0.2.0-Akunda.zip)
 
 Это архив для установки, включающий основной аддон и русские аудиозаписи

@@ -30,6 +30,15 @@ PROFILES = {
     "sage": {"speaker": "aidar", "rate": "slow", "pitch": "low"},
     "scout": {"speaker": "baya", "rate": "medium", "pitch": "medium"},
     "loa": {"speaker": "eugene", "rate": "slow", "pitch": "low"},
+    "akunda_mature": {
+        "speaker": "aidar", "rate": "medium", "pitch": "low",
+        "postprocess": (
+            "rubberband=tempo=0.97:pitch=0.94:formant=shifted,"
+            "highpass=f=65,equalizer=f=160:t=q:w=0.9:g=1.2,"
+            "equalizer=f=2700:t=q:w=0.9:g=1,"
+            "acompressor=threshold=0.15:ratio=1.5:attack=20:release=150:makeup=1"
+        ),
+    },
 }
 DEMO_TEXT = (
     "Путник. Драконьи острова пробуждаются. "
@@ -138,8 +147,10 @@ def render(model, text: str, profile: str, output: Path, model_digest: str) -> N
                 wav.writeframes(samples.tobytes())
                 wav.writeframes(bytes(int(SAMPLE_RATE * 0.15) * 2))
         encoded = work / "speech.ogg"
+        filters = [profile_data["postprocess"]] if profile_data.get("postprocess") else []
+        filters.append("loudnorm=I=-18:TP=-1.5:LRA=7")
         subprocess.run([ffmpeg, "-nostdin", "-v", "error", "-i", str(wav_path), "-af",
-                        "loudnorm=I=-18:TP=-1.5:LRA=7", "-ar", str(SAMPLE_RATE), "-ac", "1",
+                        ",".join(filters), "-ar", str(SAMPLE_RATE), "-ac", "1",
                         "-c:a", "libvorbis", "-q:a", "5", str(encoded)], check=True)
         # Decode the entire generated file, preserving a failing decoder exit status.
         subprocess.run([ffmpeg, "-nostdin", "-v", "error", "-i", str(encoded), "-f", "null", "-"], check=True)

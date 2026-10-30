@@ -1,5 +1,9 @@
 # Warcraft Audi
 
+Новая проба более массивного голоса Акунды: [послушать](https://github.com/Natjiz/mode-warcraft-audi/raw/refs/heads/main/downloads/Akunda-voice-0.2.1.mp3),
+[скачать сборку 0.2.1](https://github.com/Natjiz/mode-warcraft-audi/raw/refs/heads/main/downloads/WarcraftAudi-0.2.1-Akunda.zip).
+Исходная рабочая озвучка сохранена для сравнения. [Описание изменений](docs/AKUNDA_VOICE.md).
+
 **[Скачать готовый ZIP с озвучкой Акунды](https://github.com/Natjiz/mode-warcraft-audi/raw/refs/heads/main/downloads/WarcraftAudi-0.2.0-Akunda.zip)**
 
 Закройте WoW, распакуйте обе папки из архива в `Interface/AddOns`, включите оба
