@@ -1,0 +1,36 @@
+{
+  "spec": {
+    "npc_id": 135154,
+    "character": "Киро — вульпера, небольшой лисоподобный предводитель каравана",
+    "model": "Qwen/Qwen3-TTS-12Hz-1.7B-VoiceDesign",
+    "revision": "5ecdb67327fd37bb2e042aab12ff7391903235d3",
+    "language": "Russian",
+    "seed": 135156,
+    "text": "Но я помогу. Во-первых, мне понадобится корень колючей сливы.",
+    "instruct": "A light-voiced adult male fox-like vulpera, small slender build, lively and quick-witted. A clear HIGH-MID male TENOR register, a thin bright forward resonance and slightly nasal fox-like color. Easy friendly conversational speech, nimble and expressive, gently reassuring. Very slight dry grain only. Native Russian pronunciation, crisp intelligible consonants, natural pace. Keep the speaking pitch comfortably elevated throughout. Small agile creature vocal proportions. Clean close dry recording.",
+    "direction_ru": "Киро: небольшой лисоподобный мужчина-вульпера. Лёгкий светлый тенор в верхней части среднего регистра; подвижная разговорная подача, немного носового резонанса. Бас и тяжёлая грудная/монструозная подача отвергнуты пользователем. Лёгкая шероховатость допустима только без понижения голоса."
+  },
+  "weights": {
+    "model.safetensors": "391e8db219f292c515297cdceeb43e4eae67cdde35fa57e79a6a8a532fca0522",
+    "speech_tokenizer/model.safetensors": "836b7b357f5ea43e889936a3709af68dfe3751881acefe4ecf0dbd30ba571258"
+  },
+  "audio_sha256": "c2941a85a2dac81fdd8461488d0a38569479c538f48b5c49802257541937d520",
+  "duration_seconds": 5.04,
+  "generation_seconds": 58.06940754398238,
+  "engine": "qwen-tts==0.1.1",
+  "postprocess": "loudness normalization only; no pitch shift or distortion",
+  "status": "audition; pronunciation and character fit require listening",
+  "checks": {
+    "pitch_method": "librosa.pyin; sr=16000, fmin=55, fmax=450, frame_length=1024, hop_length=160, voiced_probability>0.15",
+    "pitch_hz_p10_median_p90": [
+      184.1,
+      222.6,
+      300.2
+    ],
+    "rejected_kiro_0_4_1_median_hz": 133.9,
+    "approved_akunda_0_3_0_median_hz": 93.6,
+    "asr_model": "openai/whisper-base, local weights",
+    "transcript": "Но я помогу. Во-первых, мне понадобится корень колючей сливы.",
+    "note": "Machine checks only; not a listening assessment or user approval."
+  }
+}

@@ -4,7 +4,8 @@
   "model": "Qwen/Qwen3-TTS-12Hz-1.7B-VoiceDesign",
   "revision": "5ecdb67327fd37bb2e042aab12ff7391903235d3",
   "language": "Russian",
-  "seed": 135154,
+  "seed": 135156,
   "text": "Но я помогу. Во-первых, мне понадобится корень колючей сливы.",
-  "instruct": "A mature male vulpera, a small fox-like nomadic caravan leader. Warm middle register, a dry slightly raspy and subtly nasal vocal texture, light agile resonance suited to a small creature. Experienced, resourceful and reassuring, with restrained friendly authority. Natural conversational pacing, native Russian pronunciation and clear precise articulation. No huge monster bass, no cartoon squeaking, no exaggerated animal noises. Dry clean voice recording without music, echo or background sound."
+  "instruct": "A light-voiced adult male fox-like vulpera, small slender build, lively and quick-witted. A clear HIGH-MID male TENOR register, a thin bright forward resonance and slightly nasal fox-like color. Easy friendly conversational speech, nimble and expressive, gently reassuring. Very slight dry grain only. Native Russian pronunciation, crisp intelligible consonants, natural pace. Keep the speaking pitch comfortably elevated throughout. Small agile creature vocal proportions. Clean close dry recording.",
+  "direction_ru": "Киро: небольшой лисоподобный мужчина-вульпера. Лёгкий светлый тенор в верхней части среднего регистра; подвижная разговорная подача, немного носового резонанса. Бас и тяжёлая грудная/монструозная подача отвергнуты пользователем. Лёгкая шероховатость допустима только без понижения голоса."
 }
