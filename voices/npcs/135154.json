@@ -1,0 +1,11 @@
+{
+  "npc_id": 135154,
+  "name": "Киро",
+  "voice_version": "kiro-candidate-0.4.1",
+  "appearance": "Киро — вульпера, небольшой лисоподобный предводитель каравана",
+  "reference": "downloads/Kiro-character-voice-0.4.1.mp3",
+  "reference_sha256": "88ebb76c72f42c895bd01b4056924b4035dba443fa3ef9d287b53e56f0adc1ee",
+  "reference_text": "Но я помогу. Во-первых, мне понадобится корень колючей сливы.",
+  "approved": false,
+  "status": "Character-specific audition; user assessment pending"
+}

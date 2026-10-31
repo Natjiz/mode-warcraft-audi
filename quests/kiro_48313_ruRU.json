@@ -1,0 +1,37 @@
+{
+  "schema_version": 1,
+  "source": "https://www.wowhead.com/ru/quest=48313&xml",
+  "source_note": "Russian quest page; exact match with the Circle client still requires checking.",
+  "quests": [
+    {
+      "quest_id": 48313,
+      "locale": "ruRU",
+      "stage": "detail",
+      "npc_id": 135154,
+      "speaker": "Киро",
+      "title": "Природное лекарство",
+      "text": "Твоему другу долго не протянуть. Скорее всего, яд скорпида уже разъедает его вены. \n\nЕсли не достать противоядие, он точно умрет.\n\nНо я помогу. \n\nВо-первых, мне понадобится корень колючей сливы. Его природные лечебные свойства позволят приготовить подходящую основу для мази.",
+      "audio": []
+    },
+    {
+      "quest_id": 48313,
+      "locale": "ruRU",
+      "stage": "progress",
+      "npc_id": 135154,
+      "speaker": "Киро",
+      "title": "Природное лекарство",
+      "text": "Ты принес корень колючей сливы для лекарства?",
+      "audio": []
+    },
+    {
+      "quest_id": 48313,
+      "locale": "ruRU",
+      "stage": "complete",
+      "npc_id": 135154,
+      "speaker": "Киро",
+      "title": "Природное лекарство",
+      "text": "Эти корни – именно то, что нужно.",
+      "audio": []
+    }
+  ]
+}

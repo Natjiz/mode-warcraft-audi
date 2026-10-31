@@ -95,6 +95,123 @@
       "size": 56413,
       "mime": "audio/ogg",
       "voice": "akunda-approved-0.3.0"
+    },
+    {
+      "request": {
+        "quest_id": 48313,
+        "stage": "detail",
+        "locale": "ruRU",
+        "gender": "unknown",
+        "npc_id": 135154,
+        "text": "Твоему другу долго не протянуть. Скорее всего, яд скорпида уже разъедает его вены. Если не достать противоядие, он точно умрет. Но я помогу. Во-первых, мне понадобится корень колючей сливы. Его природные лечебные свойства позволят приготовить подходящую основу для мази.",
+        "speaker": "Киро",
+        "npc_race": "",
+        "npc_type": "",
+        "npc_gender": ""
+      },
+      "url": "https://raw.githubusercontent.com/Natjiz/mode-warcraft-audi/main/assets/kiro_streamed/detail.ogg",
+      "sha256": "8d70019590204e5307e9b7c6a78bd3d3543e90029037064170e49ca79461062a",
+      "size": 161247,
+      "mime": "audio/ogg",
+      "voice": "kiro-candidate-0.4.1"
+    },
+    {
+      "request": {
+        "quest_id": 48313,
+        "stage": "progress",
+        "locale": "ruRU",
+        "gender": "unknown",
+        "npc_id": 135154,
+        "text": "Ты принес корень колючей сливы для лекарства?",
+        "speaker": "Киро",
+        "npc_race": "",
+        "npc_type": "",
+        "npc_gender": ""
+      },
+      "url": "https://raw.githubusercontent.com/Natjiz/mode-warcraft-audi/main/assets/kiro_streamed/progress.ogg",
+      "sha256": "6305e8be4b8df3efca97022fbed9bfa20daf477af7b4ca2632fb4d3700fb6699",
+      "size": 25845,
+      "mime": "audio/ogg",
+      "voice": "kiro-candidate-0.4.1"
+    },
+    {
+      "request": {
+        "quest_id": 48313,
+        "stage": "complete",
+        "locale": "ruRU",
+        "gender": "unknown",
+        "npc_id": 135154,
+        "text": "Эти корни – именно то, что нужно.",
+        "speaker": "Киро",
+        "npc_race": "",
+        "npc_type": "",
+        "npc_gender": ""
+      },
+      "url": "https://raw.githubusercontent.com/Natjiz/mode-warcraft-audi/main/assets/kiro_streamed/complete.ogg",
+      "sha256": "205be5109f4f146d20e796bb1ee91c3694905bec7c096bc79d44c6ea9a7abab9",
+      "size": 23009,
+      "mime": "audio/ogg",
+      "voice": "kiro-candidate-0.4.1"
+    },
+    {
+      "request": {
+        "quest_id": 50913,
+        "stage": "detail",
+        "locale": "ruRU",
+        "gender": "male",
+        "npc_id": 0,
+        "text": "Ты хорошо себя проявил и показал достойным моего благословения. Если выберешь меня своим лоа, то сможешь взывать к моей силе в случае нужды. Просто подойди к алтарю и прими мой дар. Но знай: что бы ты ни выбрал, тебе всегда будут рады в этих стенах.",
+        "speaker": "Рассказчик",
+        "npc_race": "",
+        "npc_type": "",
+        "npc_gender": ""
+      },
+      "url": "https://raw.githubusercontent.com/Natjiz/mode-warcraft-audi/main/assets/akunda_streamed/detail_male.ogg",
+      "sha256": "ad74fe6118ecfb135c633315e61cd8bf0f704e06700bb443b509b12ae3db7938",
+      "size": 147654,
+      "mime": "audio/ogg",
+      "voice": "akunda-approved-0.3.0",
+      "match": "known-quest-journal"
+    },
+    {
+      "request": {
+        "quest_id": 50913,
+        "stage": "detail",
+        "locale": "ruRU",
+        "gender": "female",
+        "npc_id": 0,
+        "text": "Ты хорошо себя проявила и показала достойной моего благословения. Если выберешь меня своим лоа, то сможешь взывать к моей силе в случае нужды. Просто подойди к алтарю и прими мой дар. Но знай: что бы ты ни выбрала, тебе всегда будут рады в этих стенах.",
+        "speaker": "Рассказчик",
+        "npc_race": "",
+        "npc_type": "",
+        "npc_gender": ""
+      },
+      "url": "https://raw.githubusercontent.com/Natjiz/mode-warcraft-audi/main/assets/akunda_streamed/detail_female.ogg",
+      "sha256": "6cefbdc695863a265ebfe2387339ac4025a65e1a5619e08a709dd5c74fe42289",
+      "size": 147635,
+      "mime": "audio/ogg",
+      "voice": "akunda-approved-0.3.0",
+      "match": "known-quest-journal"
+    },
+    {
+      "request": {
+        "quest_id": 48313,
+        "stage": "detail",
+        "locale": "ruRU",
+        "gender": "unknown",
+        "npc_id": 0,
+        "text": "Твоему другу долго не протянуть. Скорее всего, яд скорпида уже разъедает его вены. Если не достать противоядие, он точно умрет. Но я помогу. Во-первых, мне понадобится корень колючей сливы. Его природные лечебные свойства позволят приготовить подходящую основу для мази.",
+        "speaker": "Рассказчик",
+        "npc_race": "",
+        "npc_type": "",
+        "npc_gender": ""
+      },
+      "url": "https://raw.githubusercontent.com/Natjiz/mode-warcraft-audi/main/assets/kiro_streamed/detail.ogg",
+      "sha256": "8d70019590204e5307e9b7c6a78bd3d3543e90029037064170e49ca79461062a",
+      "size": 161247,
+      "mime": "audio/ogg",
+      "voice": "kiro-candidate-0.4.1",
+      "match": "known-quest-journal"
     }
   ]
 }

@@ -1,5 +1,11 @@
 # Готовая сборка
 
+Обновление готового каталога: «Природное лекарство» (48313) от Киро.
+[Проба голоса Киро](https://github.com/Natjiz/mode-warcraft-audi/raw/refs/heads/main/downloads/Kiro-character-voice-0.4.1.mp3).
+Для загрузки записей переустанавливать программу не нужно: завершите её,
+запустите `Start.bat` снова, нажмите «Запустить», выберите квест в журнале
+и введите `/wca read`.
+
 ## Программа и аддон для Windows — 0.4.0
 
 [Скачать переносимый комплект, около 18 МБ](https://github.com/Natjiz/mode-warcraft-audi/raw/refs/heads/main/downloads/WarcraftAudi-Companion-0.4.0-Windows.zip).

@@ -1,0 +1,10 @@
+{
+  "npc_id": 135154,
+  "character": "Киро — вульпера, небольшой лисоподобный предводитель каравана",
+  "model": "Qwen/Qwen3-TTS-12Hz-1.7B-VoiceDesign",
+  "revision": "5ecdb67327fd37bb2e042aab12ff7391903235d3",
+  "language": "Russian",
+  "seed": 135154,
+  "text": "Но я помогу. Во-первых, мне понадобится корень колючей сливы.",
+  "instruct": "A mature male vulpera, a small fox-like nomadic caravan leader. Warm middle register, a dry slightly raspy and subtly nasal vocal texture, light agile resonance suited to a small creature. Experienced, resourceful and reassuring, with restrained friendly authority. Natural conversational pacing, native Russian pronunciation and clear precise articulation. No huge monster bass, no cartoon squeaking, no exaggerated animal noises. Dry clean voice recording without music, echo or background sound."
+}

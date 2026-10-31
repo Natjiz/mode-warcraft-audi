@@ -1,0 +1,22 @@
+{
+  "spec": {
+    "npc_id": 135154,
+    "character": "Киро — вульпера, небольшой лисоподобный предводитель каравана",
+    "model": "Qwen/Qwen3-TTS-12Hz-1.7B-VoiceDesign",
+    "revision": "5ecdb67327fd37bb2e042aab12ff7391903235d3",
+    "language": "Russian",
+    "seed": 135154,
+    "text": "Но я помогу. Во-первых, мне понадобится корень колючей сливы.",
+    "instruct": "A mature male vulpera, a small fox-like nomadic caravan leader. Warm middle register, a dry slightly raspy and subtly nasal vocal texture, light agile resonance suited to a small creature. Experienced, resourceful and reassuring, with restrained friendly authority. Natural conversational pacing, native Russian pronunciation and clear precise articulation. No huge monster bass, no cartoon squeaking, no exaggerated animal noises. Dry clean voice recording without music, echo or background sound."
+  },
+  "weights": {
+    "model.safetensors": "391e8db219f292c515297cdceeb43e4eae67cdde35fa57e79a6a8a532fca0522",
+    "speech_tokenizer/model.safetensors": "836b7b357f5ea43e889936a3709af68dfe3751881acefe4ecf0dbd30ba571258"
+  },
+  "audio_sha256": "88ebb76c72f42c895bd01b4056924b4035dba443fa3ef9d287b53e56f0adc1ee",
+  "duration_seconds": 4.72,
+  "generation_seconds": 48.34721302500111,
+  "engine": "qwen-tts==0.1.1",
+  "postprocess": "loudness normalization only; no pitch shift or distortion",
+  "status": "audition; pronunciation and character fit require listening"
+}

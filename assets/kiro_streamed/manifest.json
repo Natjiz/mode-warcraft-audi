@@ -1,0 +1,57 @@
+{
+  "voice": "kiro-candidate-0.4.1",
+  "items": [
+    {
+      "request": {
+        "quest_id": 48313,
+        "stage": "detail",
+        "locale": "ruRU",
+        "gender": "unknown",
+        "npc_id": 135154,
+        "text": "Твоему другу долго не протянуть. Скорее всего, яд скорпида уже разъедает его вены. Если не достать противоядие, он точно умрет. Но я помогу. Во-первых, мне понадобится корень колючей сливы. Его природные лечебные свойства позволят приготовить подходящую основу для мази.",
+        "speaker": "Киро",
+        "npc_race": "",
+        "npc_type": "",
+        "npc_gender": ""
+      },
+      "file": "assets/kiro_streamed/detail.ogg",
+      "sha256": "8d70019590204e5307e9b7c6a78bd3d3543e90029037064170e49ca79461062a",
+      "mime": "audio/ogg"
+    },
+    {
+      "request": {
+        "quest_id": 48313,
+        "stage": "progress",
+        "locale": "ruRU",
+        "gender": "unknown",
+        "npc_id": 135154,
+        "text": "Ты принес корень колючей сливы для лекарства?",
+        "speaker": "Киро",
+        "npc_race": "",
+        "npc_type": "",
+        "npc_gender": ""
+      },
+      "file": "assets/kiro_streamed/progress.ogg",
+      "sha256": "6305e8be4b8df3efca97022fbed9bfa20daf477af7b4ca2632fb4d3700fb6699",
+      "mime": "audio/ogg"
+    },
+    {
+      "request": {
+        "quest_id": 48313,
+        "stage": "complete",
+        "locale": "ruRU",
+        "gender": "unknown",
+        "npc_id": 135154,
+        "text": "Эти корни – именно то, что нужно.",
+        "speaker": "Киро",
+        "npc_race": "",
+        "npc_type": "",
+        "npc_gender": ""
+      },
+      "file": "assets/kiro_streamed/complete.ogg",
+      "sha256": "205be5109f4f146d20e796bb1ee91c3694905bec7c096bc79d44c6ea9a7abab9",
+      "mime": "audio/ogg"
+    }
+  ],
+  "engine_revision": "fdeb6a4cc28657625026317b71ba3a11cd28b809f8c34a1bfe6f2b654b0101eb"
+}
