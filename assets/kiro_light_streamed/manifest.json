@@ -1,0 +1,59 @@
+{
+  "voice": "kiro-light-candidate-0.4.2",
+  "status": "candidate",
+  "items": [
+    {
+      "request": {
+        "quest_id": 48313,
+        "stage": "detail",
+        "locale": "ruRU",
+        "gender": "unknown",
+        "npc_id": 135154,
+        "text": "Твоему другу долго не протянуть. Скорее всего, яд скорпида уже разъедает его вены. Если не достать противоядие, он точно умрет. Но я помогу. Во-первых, мне понадобится корень колючей сливы. Его природные лечебные свойства позволят приготовить подходящую основу для мази.",
+        "speaker": "Киро",
+        "npc_race": "",
+        "npc_type": "",
+        "npc_gender": ""
+      },
+      "file": "assets/kiro_light_streamed/detail.ogg",
+      "sha256": "3b02218a7534096b0bbe1e6b3115c2a4bbc8839b0ddff9ed0e95e4633f0f7a43",
+      "mime": "audio/ogg",
+      "render_note": "Sentence/paragraph synthesis, same NPC reference throughout; final second sentence uses original spelling with a pause after Скорее всего. No pitch shifting; canonical quest text unchanged."
+    },
+    {
+      "request": {
+        "quest_id": 48313,
+        "stage": "progress",
+        "locale": "ruRU",
+        "gender": "unknown",
+        "npc_id": 135154,
+        "text": "Ты принес корень колючей сливы для лекарства?",
+        "speaker": "Киро",
+        "npc_race": "",
+        "npc_type": "",
+        "npc_gender": ""
+      },
+      "file": "assets/kiro_light_streamed/progress.ogg",
+      "sha256": "10e5956d27349a02bec349c0482ba156399eb8c3291a5546d421489f20f8bb37",
+      "mime": "audio/ogg"
+    },
+    {
+      "request": {
+        "quest_id": 48313,
+        "stage": "complete",
+        "locale": "ruRU",
+        "gender": "unknown",
+        "npc_id": 135154,
+        "text": "Эти корни – именно то, что нужно.",
+        "speaker": "Киро",
+        "npc_race": "",
+        "npc_type": "",
+        "npc_gender": ""
+      },
+      "file": "assets/kiro_light_streamed/complete.ogg",
+      "sha256": "cc123889d9cf64f40ac4b83b94c904f5c748e2eece0ede0e770232c4f2eb90f6",
+      "mime": "audio/ogg"
+    }
+  ],
+  "engine_revision": "f3b6cdcc2b874b72b5596c71ce069163645e99c2a600f20f2041d6347b6059f4"
+}

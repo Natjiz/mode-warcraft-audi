@@ -18,6 +18,8 @@ def build():
                     "mime": "audio/mpeg", "sha256": demo_receipt['audio_sha256'], "voice": "akunda-approved-0.3.0"})
     for source in sorted((ROOT / "assets").glob("*_streamed/manifest.json")):
         manifest = json.loads(source.read_text(encoding="utf-8"))
+        if manifest.get('status') == 'rejected':
+            continue
         for item in manifest['items']:
             entry = dict(item)
             voice = entry.get('voice') or manifest.get('voice')

@@ -1,11 +1,15 @@
 {
   "npc_id": 135154,
   "name": "Киро",
-  "voice_version": "kiro-candidate-0.4.1",
+  "voice_version": "kiro-light-candidate-0.4.2",
   "appearance": "Киро — вульпера, небольшой лисоподобный предводитель каравана",
-  "reference": "downloads/Kiro-character-voice-0.4.1.mp3",
-  "reference_sha256": "88ebb76c72f42c895bd01b4056924b4035dba443fa3ef9d287b53e56f0adc1ee",
+  "reference": "downloads/Kiro-character-voice-0.4.2.mp3",
+  "reference_sha256": "c2941a85a2dac81fdd8461488d0a38569479c538f48b5c49802257541937d520",
   "reference_text": "Но я помогу. Во-первых, мне понадобится корень колючей сливы.",
   "approved": false,
-  "status": "Character-specific audition; user assessment pending"
+  "status": "Replacement candidate: user rejected 0.4.1 as too bassy; new light tenor requires listening",
+  "voice_direction": "Киро: небольшой лисоподобный мужчина-вульпера. Лёгкий светлый тенор в верхней части среднего регистра; подвижная разговорная подача, немного носового резонанса. Бас и тяжёлая грудная/монструозная подача отвергнуты пользователем. Лёгкая шероховатость допустима только без понижения голоса.",
+  "rejected_versions": [
+    "kiro-candidate-0.4.1"
+  ]
 }

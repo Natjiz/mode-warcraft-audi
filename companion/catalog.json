@@ -109,11 +109,11 @@
         "npc_type": "",
         "npc_gender": ""
       },
-      "url": "https://raw.githubusercontent.com/Natjiz/mode-warcraft-audi/main/assets/kiro_streamed/detail.ogg",
-      "sha256": "8d70019590204e5307e9b7c6a78bd3d3543e90029037064170e49ca79461062a",
-      "size": 161247,
+      "url": "https://raw.githubusercontent.com/Natjiz/mode-warcraft-audi/main/assets/kiro_light_streamed/detail.ogg",
+      "sha256": "3b02218a7534096b0bbe1e6b3115c2a4bbc8839b0ddff9ed0e95e4633f0f7a43",
+      "size": 141992,
       "mime": "audio/ogg",
-      "voice": "kiro-candidate-0.4.1"
+      "voice": "kiro-light-candidate-0.4.2"
     },
     {
       "request": {
@@ -128,11 +128,11 @@
         "npc_type": "",
         "npc_gender": ""
       },
-      "url": "https://raw.githubusercontent.com/Natjiz/mode-warcraft-audi/main/assets/kiro_streamed/progress.ogg",
-      "sha256": "6305e8be4b8df3efca97022fbed9bfa20daf477af7b4ca2632fb4d3700fb6699",
-      "size": 25845,
+      "url": "https://raw.githubusercontent.com/Natjiz/mode-warcraft-audi/main/assets/kiro_light_streamed/progress.ogg",
+      "sha256": "10e5956d27349a02bec349c0482ba156399eb8c3291a5546d421489f20f8bb37",
+      "size": 22866,
       "mime": "audio/ogg",
-      "voice": "kiro-candidate-0.4.1"
+      "voice": "kiro-light-candidate-0.4.2"
     },
     {
       "request": {
@@ -147,11 +147,11 @@
         "npc_type": "",
         "npc_gender": ""
       },
-      "url": "https://raw.githubusercontent.com/Natjiz/mode-warcraft-audi/main/assets/kiro_streamed/complete.ogg",
-      "sha256": "205be5109f4f146d20e796bb1ee91c3694905bec7c096bc79d44c6ea9a7abab9",
-      "size": 23009,
+      "url": "https://raw.githubusercontent.com/Natjiz/mode-warcraft-audi/main/assets/kiro_light_streamed/complete.ogg",
+      "sha256": "cc123889d9cf64f40ac4b83b94c904f5c748e2eece0ede0e770232c4f2eb90f6",
+      "size": 26904,
       "mime": "audio/ogg",
-      "voice": "kiro-candidate-0.4.1"
+      "voice": "kiro-light-candidate-0.4.2"
     },
     {
       "request": {
@@ -206,11 +206,11 @@
         "npc_type": "",
         "npc_gender": ""
       },
-      "url": "https://raw.githubusercontent.com/Natjiz/mode-warcraft-audi/main/assets/kiro_streamed/detail.ogg",
-      "sha256": "8d70019590204e5307e9b7c6a78bd3d3543e90029037064170e49ca79461062a",
-      "size": 161247,
+      "url": "https://raw.githubusercontent.com/Natjiz/mode-warcraft-audi/main/assets/kiro_light_streamed/detail.ogg",
+      "sha256": "3b02218a7534096b0bbe1e6b3115c2a4bbc8839b0ddff9ed0e95e4633f0f7a43",
+      "size": 141992,
       "mime": "audio/ogg",
-      "voice": "kiro-candidate-0.4.1",
+      "voice": "kiro-light-candidate-0.4.2",
       "match": "known-quest-journal"
     }
   ]

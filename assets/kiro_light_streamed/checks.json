@@ -1,0 +1,35 @@
+{
+  "voice": "kiro-light-candidate-0.4.2",
+  "status": "candidate, not user approved",
+  "checks": {
+    "reference_median_pitch_hz": 222.6,
+    "rejected_reference_median_pitch_hz": 133.9,
+    "progress_median_pitch_hz": 231.7,
+    "complete_median_pitch_hz": 225.1,
+    "reference_asr": "Но я помогу. Во-первых, мне понадобится корень колючей сливы.",
+    "short_stage_asr": [
+      {
+        "file": "assets/kiro_light_streamed/progress.ogg",
+        "transcript": " Ты принес корень колючей сливы для лекарства?"
+      },
+      {
+        "file": "assets/kiro_light_streamed/complete.ogg",
+        "transcript": " Эти корни именно то, что нужно."
+      }
+    ],
+    "second_sentence_asr": {
+      "model": "openai/whisper-small",
+      "revision": "973afd24965f72e36ca33b3055d56a652f456b4d",
+      "weight_sha256": "1d7734884874f1a1513ed9aa760a4f8e97aaa02fd6d93a3a85d27b2ae9ca596b",
+      "items": [
+        {
+          "transcript": " Скорее всего, яд Скарпида уже разъедает его вины."
+        }
+      ]
+    },
+    "second_sentence_expected": "Скорее всего, яд скорпида уже разъедает его вены.",
+    "note": "ASR capitalization/recognition differs for скорпида and вены. Accent-mark take rejected. Machine decoding and pitch checks do not establish pronunciation or artistic fit; listening remains necessary.",
+    "regression_tests": "47 passed, no skips",
+    "detail_median_pitch_hz": 216.2
+  }
+}

@@ -65,6 +65,20 @@ class CatalogBuildTests(unittest.TestCase):
             self.build()
         self.assertEqual((self.root / 'companion/catalog.json').read_bytes(), previous)
 
+    def test_rejected_voice_cannot_return_to_catalog_or_journal(self):
+        request, path = self.recording('old_kiro', 135154, 'kiro-rejected')
+        manifest_path = path.parent / 'manifest.json'
+        manifest = json.loads(manifest_path.read_text())
+        manifest['status'] = 'rejected'
+        manifest_path.write_text(json.dumps(manifest))
+        catalog = Catalog(self.build())
+        self.assertIsNone(catalog.find(request))
+        self.assertIsNone(catalog.find({**request, 'npc_id': 0}))
+        self.recording('new_kiro', 135154, 'kiro-light-candidate')
+        catalog = Catalog(self.build())
+        self.assertEqual(catalog.find(request)['voice'], 'kiro-light-candidate')
+        self.assertEqual(catalog.find({**request, 'npc_id': 0})['voice'], 'kiro-light-candidate')
+
 
 if __name__ == '__main__':
     unittest.main()

@@ -18,5 +18,5 @@
   "generation_seconds": 48.34721302500111,
   "engine": "qwen-tts==0.1.1",
   "postprocess": "loudness normalization only; no pitch shift or distortion",
-  "status": "audition; pronunciation and character fit require listening"
+  "status": "rejected by user: bass does not fit Kiro appearance"
 }

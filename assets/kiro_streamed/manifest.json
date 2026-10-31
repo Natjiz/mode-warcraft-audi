@@ -53,5 +53,7 @@
       "mime": "audio/ogg"
     }
   ],
-  "engine_revision": "fdeb6a4cc28657625026317b71ba3a11cd28b809f8c34a1bfe6f2b654b0101eb"
+  "engine_revision": "fdeb6a4cc28657625026317b71ba3a11cd28b809f8c34a1bfe6f2b654b0101eb",
+  "status": "rejected",
+  "rejection_reason": "User rejected Kiro 0.4.1 as too bassy for a small fox-like vulpera. Historical files only; never publish in active catalog."
 }
