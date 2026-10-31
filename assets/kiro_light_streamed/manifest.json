@@ -1,6 +1,6 @@
 {
   "voice": "kiro-light-candidate-0.4.2",
-  "status": "candidate",
+  "status": "voice-approved",
   "items": [
     {
       "request": {
@@ -55,5 +55,10 @@
       "mime": "audio/ogg"
     }
   ],
-  "engine_revision": "f3b6cdcc2b874b72b5596c71ce069163645e99c2a600f20f2041d6347b6059f4"
+  "engine_revision": "f3b6cdcc2b874b72b5596c71ce069163645e99c2a600f20f2041d6347b6059f4",
+  "voice_review": {
+    "approved": true,
+    "user_feedback": "пойдет",
+    "scope": "Kiro voice 0.4.2; reuse this reference for future Kiro lines"
+  }
 }

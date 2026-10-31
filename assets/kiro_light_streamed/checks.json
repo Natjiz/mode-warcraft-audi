@@ -1,6 +1,6 @@
 {
   "voice": "kiro-light-candidate-0.4.2",
-  "status": "candidate, not user approved",
+  "status": "Voice accepted by user; machine check limitations unchanged",
   "checks": {
     "reference_median_pitch_hz": 222.6,
     "rejected_reference_median_pitch_hz": 133.9,
@@ -31,5 +31,10 @@
     "note": "ASR capitalization/recognition differs for скорпида and вены. Accent-mark take rejected. Machine decoding and pitch checks do not establish pronunciation or artistic fit; listening remains necessary.",
     "regression_tests": "47 passed, no skips",
     "detail_median_pitch_hz": 216.2
+  },
+  "voice_review": {
+    "approved": true,
+    "user_feedback": "пойдет",
+    "scope": "Kiro voice 0.4.2; reuse this reference for future Kiro lines"
   }
 }

@@ -8,6 +8,9 @@ speech. A rough or deep voice is not a universal Warcraft style.
 - Kiro is a small fox-like male vulpera. The user rejected the 0.4.1 voice as too
   bassy. Use a light, agile male tenor, forward/slightly nasal resonance, natural
   conversational expression and only a little dry grain. Avoid heavy chest bass.
+- Kiro 0.4.2 was accepted by the user ("пойдет"). Keep
+  `downloads/Kiro-character-voice-0.4.2.mp3` as his approved reference for future
+  Kiro quests. Preserve the existing voice version ID and audio URLs.
 - Keep one consistent reference per NPC across quests; never reuse Akunda's
   reference or direction as a generic male fallback.
 - A prompt describing the right voice does not prove that the audio matches it.

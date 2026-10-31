@@ -32,5 +32,10 @@
     "asr_model": "openai/whisper-base, local weights",
     "transcript": "Но я помогу. Во-первых, мне понадобится корень колючей сливы.",
     "note": "Machine checks only; not a listening assessment or user approval."
+  },
+  "voice_review": {
+    "approved": true,
+    "user_feedback": "пойдет",
+    "scope": "Kiro voice 0.4.2; reuse this reference for future Kiro lines"
   }
 }

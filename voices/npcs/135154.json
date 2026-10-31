@@ -6,10 +6,15 @@
   "reference": "downloads/Kiro-character-voice-0.4.2.mp3",
   "reference_sha256": "c2941a85a2dac81fdd8461488d0a38569479c538f48b5c49802257541937d520",
   "reference_text": "Но я помогу. Во-первых, мне понадобится корень колючей сливы.",
-  "approved": false,
-  "status": "Replacement candidate: user rejected 0.4.1 as too bassy; new light tenor requires listening",
+  "approved": true,
+  "status": "Voice 0.4.2 accepted by user; preserve this reference across Kiro quests",
   "voice_direction": "Киро: небольшой лисоподобный мужчина-вульпера. Лёгкий светлый тенор в верхней части среднего регистра; подвижная разговорная подача, немного носового резонанса. Бас и тяжёлая грудная/монструозная подача отвергнуты пользователем. Лёгкая шероховатость допустима только без понижения голоса.",
   "rejected_versions": [
     "kiro-candidate-0.4.1"
-  ]
+  ],
+  "voice_review": {
+    "approved": true,
+    "user_feedback": "пойдет",
+    "scope": "Kiro voice 0.4.2; reuse this reference for future Kiro lines"
+  }
 }
