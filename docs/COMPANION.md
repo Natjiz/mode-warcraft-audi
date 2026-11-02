@@ -76,3 +76,9 @@ Windows-проверка `.github/workflows/windows.yml` создаёт наст
 текста: тест не запускает WoW Circle и не проверяет физическое звуковое устройство.
 Актуальный результат конкретного запуска нужно смотреть в GitHub Actions;
 наличие workflow само по себе не означает успешную проверку.
+
+Проверка сборки 0.5.0 прошла на Windows:
+[GitHub Actions 41519261394](https://github.com/Natjiz/mode-warcraft-audi/actions/runs/41519261394).
+Успешны unit-тесты, настоящее окно/захват Windows и запуск EXE с комплектным
+Python из пути с русскими буквами и пробелами. Отчёт и SHA ZIP:
+`downloads/WarcraftAudi-0.5.0-Windows.json`.

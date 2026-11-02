@@ -1,0 +1,19 @@
+{
+  "version": "0.5.0",
+  "file": "WarcraftAudi-0.5.0-Windows.zip",
+  "size_bytes": 18720044,
+  "sha256": "527c5233d71d5fcdbef4a05094428b57e033bc98396aac5f477e52abf1c29b79",
+  "validation": {
+    "linux_tests": "53 passed, no skips",
+    "windows_workflow": "https://github.com/Natjiz/mode-warcraft-audi/actions/runs/41519261394",
+    "windows_job": "success",
+    "native_smoke": "Real Win32 UI, Windows mss screen capture of a synthetic multi-page Kiro quest, public audio download with SHA validation and native audio decoding",
+    "bundle_smoke": "Shipped exe and embedded Python launched from a Unicode/space path; repeated launch and exit checked"
+  },
+  "limits": [
+    "Actual WoW Circle was not launched by these tests.",
+    "Physical audio output was not tested.",
+    "Visible optical signal and windowed borderless mode remain required.",
+    "Public generation server is not deployed; published quests only by default."
+  ]
+}
