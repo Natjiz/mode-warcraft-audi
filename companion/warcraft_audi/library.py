@@ -96,7 +96,9 @@ class QuestLibrary:
     def lookup(self,payload):
         request=canonical_request(payload)
         if request['locale']!='ruRU':raise ValueError('Поддерживается русский язык клиента')
-        key=catalog_key(request)
+        # Player gender is already reflected in the actual text. Identical
+        # lines spoken by the same NPC share one recording across players.
+        key=catalog_key({**request,'gender':'unknown'})
         record=self.store.get(key)
         if record and record.get('voice_revision')==self.engine.revision_for(request):
             audio=record.get('audio',{})
@@ -115,7 +117,9 @@ class QuestLibrary:
             data,mime=self.render(request)
             if not data or len(data)>16*1024**2:raise ValueError('Invalid generated audio size')
             revision=self.engine.revision_for(request)
-            key=catalog_key(request)
+            # Player gender is already reflected in the actual text. Identical
+            # lines spoken by the same NPC share one recording across players.
+            key=catalog_key({**request,'gender':'unknown'})
             record={'schema_version':1,'id':hashlib.sha256((key+revision).encode()).hexdigest(),'status':'ready',
                     'request':request,'voice_revision':revision,'voice':self.engine.voice_info(request),
                     'audio':{'sha256':hashlib.sha256(data).hexdigest(),'size':len(data),'mime':mime}}

@@ -36,6 +36,8 @@ class QuestLibraryTests(unittest.TestCase):
                 results=list(executor.map(lambda _:library.generate(request),range(2)))
             self.assertEqual(engine.calls,1)
             self.assertEqual(results[0],results[1])
+            self.assertEqual(library.generate({**request,'gender':'female'}),results[0])
+            self.assertEqual(engine.calls,1,'Identical text must not render again for a different player gender')
             self.assertNotIn('player_name',results[0]['request'])
             new_engine=Engine(root)
             restarted=QuestLibrary(store,new_engine)

@@ -42,7 +42,7 @@ def profile_for(request):
     if selected=='vulpera' and sex=='male':
         direction='A light-voiced adult male fox-like vulpera, small slender build, lively and quick-witted. A clear HIGH-MID male TENOR register, thin bright forward resonance and slightly nasal color. A light male tenor, agile friendly conversational speech, very little dry grain. Keep speaking pitch comfortably elevated.'
     instruction = direction + ' Native Russian, intelligible speech, dry clean recording, natural emotion and pacing.'
-    bounds=([165,360] if sex=='male' else [190,420]) if selected in {'vulpera','gnome','goblin'} else [55,450]
+    bounds=([165,360] if sex=='male' else [190,420] if sex=='female' else [150,420]) if selected in {'vulpera','gnome','goblin'} else [55,450]
     version = hashlib.sha256(('character-direction-v3:' + instruction+str(bounds)).encode()).hexdigest()
     return {'id': selected or 'unspecified', 'instruction': instruction, 'revision': version,
             'status': quality, 'approved': False,'pitch_bounds_hz':bounds}
