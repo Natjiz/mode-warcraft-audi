@@ -16,5 +16,10 @@
     "Physical audio output was not tested.",
     "Visible optical signal and windowed borderless mode remain required.",
     "Public generation server is not deployed; published quests only by default."
-  ]
+  ],
+  "user_report": {
+    "date": "2026-11-03",
+    "feedback": "нормально вроде работает",
+    "scope": "Initial user feedback on the native companion in game; individual acceptance scenarios not yet confirmed"
+  }
 }
