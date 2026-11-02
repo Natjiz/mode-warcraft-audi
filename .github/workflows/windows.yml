@@ -9,6 +9,8 @@ on:
       - 'downloads/WarcraftAudi-0.5.0-Windows.zip'
       - '.github/workflows/windows.yml'
   workflow_dispatch:
+env:
+  PYTHONUTF8: "1"
 permissions:
   contents: read
 jobs:
