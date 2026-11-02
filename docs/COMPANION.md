@@ -82,3 +82,7 @@ Windows-проверка `.github/workflows/windows.yml` создаёт наст
 Успешны unit-тесты, настоящее окно/захват Windows и запуск EXE с комплектным
 Python из пути с русскими буквами и пробелами. Отчёт и SHA ZIP:
 `downloads/WarcraftAudi-0.5.0-Windows.json`.
+
+Unit-результаты: Linux — 53/53 без пропусков; Windows — 52 успешных,
+1 пропуск проверки FFmpeg-кодировщика (FFmpeg отсутствует на runner).
+Отдельные native/bundle-проверки Windows прошли без пропусков.

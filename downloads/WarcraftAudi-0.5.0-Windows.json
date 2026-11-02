@@ -8,7 +8,8 @@
     "windows_workflow": "https://github.com/Natjiz/mode-warcraft-audi/actions/runs/41519261394",
     "windows_job": "success",
     "native_smoke": "Real Win32 UI, Windows mss screen capture of a synthetic multi-page Kiro quest, public audio download with SHA validation and native audio decoding",
-    "bundle_smoke": "Shipped exe and embedded Python launched from a Unicode/space path; repeated launch and exit checked"
+    "bundle_smoke": "Shipped exe and embedded Python launched from a Unicode/space path; repeated launch and exit checked",
+    "windows_unit_tests": "52 passed, 1 skipped (FFmpeg encoder integration; passed on Linux)"
   },
   "limits": [
     "Actual WoW Circle was not launched by these tests.",
