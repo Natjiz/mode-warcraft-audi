@@ -20,38 +20,41 @@ import zipfile
 ROOT = Path(__file__).resolve().parents[1]
 PYTHON_FILE = "python-3.12.10-embed-amd64.zip"
 PYTHON_SHA = "4acbed6dd1c744b0376e3b1cf57ce906f9dc9e95e68824584c8099a63025a3c3"
-README = """Warcraft Audi Companion 0.4.0 — первая проверочная сборка Windows 10/11 x64
+README = """Warcraft Audi 0.5.0 — Windows 10/11 x64
 
-1. Полностью распакуйте этот архив в обычную папку на компьютере.
-   Запускать Start.bat прямо внутри ZIP нельзя.
-2. При закрытой игре скопируйте папку AddOns/WarcraftAudi в Interface/AddOns
-   вашего клиента, заменив основной аддон WarcraftAudi.
-3. Запустите Start.bat. Установка Python и права администратора не нужны.
-   Откроется окно управления в браузере. Окно программы можно свернуть.
-4. Нажмите «Проверить голос» — будет скачана утверждённая проба Акунды.
-5. Войдите в WoW 10.2.7 и введите /wca companion.
-6. В программе нажмите «Выделить индикатор на экране» и за 3 секунды
-   переключитесь в WoW. Подождите 3 секунды, вернитесь в программу, обведите
-   прямоугольник аддона с тремя цветными углами и сохраните область.
-7. Нажмите «Запустить», вернитесь в игру и откройте квест.
+Обновление / первая установка:
+1. Полностью распакуйте архив в обычную папку на компьютере.
+2. При закрытой игре скопируйте AddOns/WarcraftAudi в Interface/AddOns
+   вашего WoW Circle 10.2.7, заменив основной аддон.
+3. Откройте WarcraftAudi.exe, запустите игру и откройте квест у NPC.
 
-Используйте оконный режим без рамки. Не закрывайте индикатор другими окнами.
-После перемещения индикатора или смены разрешения выделите его снова.
-Когда индикатор пропадает, воспроизведение прекращается примерно через 2 секунды.
-Для возврата к обычному аддону повторите /wca companion.
+Браузер не нужен. Подключение начинается автоматически. Выделять области,
+нажимать «Запустить» или вводить /wca companion не требуется. Окно программы
+можно свернуть. Закрытие окна завершает программу и останавливает озвучку.
+Программа может быть запущена раньше или позже игры.
 
-Первоначально доступны опубликованные записи Акунды, а не все квесты.
-Чтобы генерировать новые реплики, нужен отдельный работающий сервер генерации:
-его HTTPS-адрес вводится в настройках. Публичный GPU-сервер в комплект не входит
-и сейчас не развёрнут. Эта сборка проверена в Linux на уровне протокола,
-интерфейса, HTTP и аудиодекодирования; запуск в Windows и связь с настоящим
-WoW Circle необходимо проверить на вашем компьютере.
+Используйте оконный режим без рамки. Небольшой экранный сигнал появляется
+автоматически при диалоге квеста и исчезает после его закрытия. Не закрывайте
+его другими окнами: это канал передачи текста из обычного WoW-аддона.
+После перемещения игры, смены монитора или масштаба программа ищет его сама.
 
-Аудиокэш: 300 МБ по умолчанию, автоматически очищается. Настройки и кэш лежат
-в %LOCALAPPDATA%/WarcraftAudi. Изображение экрана обрабатывается локально.
-Серверу передаются только текст задания и сведения о NPC. Ключ сервера хранится
-только до закрытия программы. Для выхода нажмите «Завершить программу».
+Без сервера доступны опубликованные записи Акунды и «Природного лекарства»
+от Киро. Новые неизвестные квесты требуют работающего сервера генерации;
+публичный сервер пока не развёрнут. Настройки сервера, громкости и кэша
+открываются кнопкой «Настройки», для готовых записей менять их не нужно.
+Голоса Акунды и Киро утверждены пользователем и закреплены за этими NPC.
 
+Start.bat оставлен для диагностики. Установка Python и права администратора
+не требуются. WarcraftAudi.exe — небольшой launcher без цифровой подписи;
+официальный CPython и Windows wheels проверены при сборке. Это не подпись
+Microsoft на нашем приложении.
+
+Кэш: 300 МБ, автоматически очищается. Настройки, журнал ошибок app.log и кэш:
+%LOCALAPPDATA%/WarcraftAudi. Изображения обрабатываются локально и не сохраняются.
+Сервер получает только текст и сведения о NPC. Ключ сервера хранится в памяти.
+
+Проверки протокола, Lua, очереди и декодирования не заменяют проверку
+настоящего WoW Circle и физического звука на компьютере игрока.
 Исходники: https://github.com/Natjiz/mode-warcraft-audi
 """
 
@@ -71,7 +74,7 @@ def extract(archive: Path, target: Path):
         source.extractall(target)
 
 
-def build(vendor: Path, output: Path):
+def build(vendor: Path, output: Path, zig: Path):
     python_zip = vendor / PYTHON_FILE
     if sha(python_zip) != PYTHON_SHA:
         raise ValueError("Official CPython checksum does not match its signed bundle")
@@ -111,11 +114,16 @@ def build(vendor: Path, output: Path):
         for source in (ROOT / "addon/WarcraftAudi").iterdir():
             if source.suffix in {".lua", ".toc"}:
                 shutil.copyfile(source, addon / source.name)
+        subprocess.run([str(zig), 'cc', '-target', 'x86_64-windows-gnu', '-nostdlib', '-ffreestanding',
+                        '-isystem', str(zig.resolve().parent / 'lib/libc/include/any-windows-any'),
+                        '-Wl,--entry,start', '-lkernel32', '-luser32',
+                        '-Wl,--subsystem,windows', '-O2', '-s', str(ROOT / 'tools/windows_launcher.c'),
+                        '-o', str(root / 'WarcraftAudi.exe')], check=True)
         (root / "Start.bat").write_bytes(b'@echo off\r\nchcp 65001 >nul\r\ncd /d "%~dp0"\r\nset PYTHONUTF8=1\r\n"%~dp0runtime\\python.exe" -m companion\r\nif errorlevel 1 pause\r\n')
         (root / "README-RU.txt").write_text(README, encoding="utf-8-sig")
         (root / "VENDOR.json").write_text(json.dumps({"python": {"version": "3.12.10", "sha256": PYTHON_SHA,
             "source": "https://www.python.org/ftp/python/3.12.10/" + PYTHON_FILE,
-            "signature_verified": "Sigstore: thomas@python.org via https://accounts.google.com"}, "wheels": verified}, indent=2), encoding="utf-8")
+            "signature_verified": "Sigstore: thomas@python.org via https://accounts.google.com"}, "wheels": verified, "launcher": {"source_sha256": sha(ROOT / "tools/windows_launcher.c"), "sha256": sha(root / "WarcraftAudi.exe"), "compiler": "Zig cc targeting x86_64-windows-gnu", "signed": False}}, indent=2), encoding="utf-8")
         archive_path = Path(directory) / "bundle.zip"
         with zipfile.ZipFile(archive_path, "w", zipfile.ZIP_DEFLATED) as archive:
             for source in sorted(root.rglob("*")):
@@ -128,6 +136,7 @@ def build(vendor: Path, output: Path):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--vendor", type=Path, default=Path("/workspace/.wca-windows-build"))
-    parser.add_argument("--output", type=Path, default=ROOT / "dist/WarcraftAudi-Companion-0.4.0-Windows.zip")
+    parser.add_argument("--output", type=Path, default=ROOT / "dist/WarcraftAudi-0.5.0-Windows.zip")
+    parser.add_argument("--zig", type=Path, required=True)
     arguments = parser.parse_args()
-    build(arguments.vendor, arguments.output)
+    build(arguments.vendor, arguments.output, arguments.zig)

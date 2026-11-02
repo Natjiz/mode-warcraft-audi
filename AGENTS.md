@@ -25,3 +25,12 @@ speech. A rough or deep voice is not a universal Warcraft style.
 
 Continue authorized implementation and public GitHub publication without asking
 the user to repeat permission. Keep instructions for the player short and concrete.
+
+# Desktop launch requirement
+
+The user rejected browser tabs, manual region selection and calibration. The
+Windows 0.5+ client must open its own native window and start waiting for the game
+automatically. Preserve automatic indicator discovery/recovery and addon mode
+migration. Do not bring selection, browser setup or a manual Start step back into
+the normal player flow. The optical signal is still required for the ordinary
+WoW addon; explain this limitation accurately and do not claim it was removed.

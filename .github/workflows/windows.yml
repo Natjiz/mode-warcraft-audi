@@ -1,0 +1,33 @@
+name: Windows companion
+on:
+  push:
+    paths:
+      - 'companion/**'
+      - 'addon/**'
+      - 'tests/**'
+      - 'tools/windows_launcher.c'
+      - 'downloads/WarcraftAudi-0.5.0-Windows.zip'
+      - '.github/workflows/windows.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  desktop:
+    runs-on: windows-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          architecture: x64
+      - run: python -m pip install -r companion/requirements.txt lupa==2.6 numpy==2.2.6 scipy==1.15.3
+      - run: python -m unittest discover -s tests -v
+      - run: python tests/windows_native_smoke.py
+      - run: python tests/windows_bundle_smoke.py
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: windows-native
+          path: windows-native.png
+          if-no-files-found: ignore

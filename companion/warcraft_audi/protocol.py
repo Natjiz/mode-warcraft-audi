@@ -133,41 +133,76 @@ def render_frame(packet: bytes):
     return image
 
 
+def _marker_centers(image, category):
+    # Pillow thresholds channels in C; only sparse marker pixels reach Python.
+    from PIL import ImageChops
+    r, g, b = image.split()
+    high = [255 if n > 190 else 0 for n in range(256)]
+    low = [255 if n < 95 else 0 for n in range(256)]
+    channels = ((r, high), (g, low), (b, high)) if category == 0 else (
+        ((r, low), (g, high), (b, high)) if category == 1 else
+        ((r, high), (g, high), (b, low)))
+    mask = ImageChops.multiply(channels[0][0].point(channels[0][1]), channels[1][0].point(channels[1][1]))
+    mask = ImageChops.multiply(mask, channels[2][0].point(channels[2][1])).tobytes()
+    points, offset = set(), 0
+    while True:
+        start = mask.find(b"\xff", offset)
+        if start < 0:
+            break
+        end = mask.find(b"\0", start)
+        if end < 0:
+            end = len(mask)
+        offset = end
+        # Wide solid-color regions (sky, UI, spell effects) are not markers.
+        # Skip runs rather than walking hundreds of thousands of colored pixels.
+        if 2 <= end - start <= 32 and start // image.width == (end - 1) // image.width:
+            points.update((n % image.width, n // image.width) for n in range(start, end))
+        if len(points) > 150000:
+            return []
+    found = []
+    while points:
+        stack = [points.pop()]
+        xs, ys = [], []
+        while stack:
+            x, y = stack.pop()
+            xs.append(x); ys.append(y)
+            for point in ((x - 1, y), (x + 1, y), (x, y - 1), (x, y + 1)):
+                if point in points:
+                    points.remove(point); stack.append(point)
+        if 4 <= len(xs) <= 1200:
+            width, height = max(xs) - min(xs), max(ys) - min(ys)
+            if 1 <= width <= 28 and 1 <= height <= 28 and abs(width - height) <= 3:
+                found.append(((min(xs) + max(xs)) / 2, (min(ys) + max(ys)) / 2))
+    return sorted(found, key=lambda p: (p[1], p[0]))[:256]
+
+
 def find_geometry(image) -> tuple[float, float, float, float]:
-    """Locate the three colored corner markers inside the user's selection."""
+    """Discover a complete checksummed indicator anywhere on a monitor.
+
+    Marker-shaped decorations and corrupt candidates must not hide a later valid
+    indicator. No saved region or mouse selection is needed.
+    """
     image = image.convert("RGB")
-    groups = [set(), set(), set()]
-    for index, (r, g, b) in enumerate(image.getdata()):
-        category = 0 if r > 190 and b > 190 and g < 95 else 1 if g > 190 and b > 190 and r < 95 else 2 if r > 190 and g > 190 and b < 95 else None
-        if category is not None:
-            groups[category].add((index % image.width, index // image.width))
-    centers = []
-    for points in groups:
-        if len(points) > 50000:
-            raise ValueError("Выделите только небольшой индикатор аддона")
-        found = []
-        while points:
-            stack = [points.pop()]
-            component = []
-            while stack:
-                x, y = stack.pop()
-                component.append((x, y))
-                for point in ((x - 1, y), (x + 1, y), (x, y - 1), (x, y + 1)):
-                    if point in points:
-                        points.remove(point)
-                        stack.append(point)
-            if len(component) >= 4:
-                xs, ys = zip(*component)
-                if abs((max(xs) - min(xs)) - (max(ys) - min(ys))) <= 3:
-                    found.append(((min(xs) + max(xs)) / 2, (min(ys) + max(ys)) / 2))
-        centers.append(found[:30])
+    centers = [_marker_centers(image, category) for category in range(3)]
+    attempts = 0
     for tl in centers[0]:
         for tr in centers[1]:
+            sx = (tr[0] - tl[0]) / (WIDTH - MARKER)
+            if not (0.45 < sx < 4 and abs(tl[1] - tr[1]) < 3):
+                continue
             for bl in centers[2]:
-                sx, sy = (tr[0] - tl[0]) / (WIDTH - MARKER), (bl[1] - tl[1]) / (HEIGHT - MARKER)
-                if 0.45 < sx < 4 and 0.45 < sy < 4 and abs(sx - sy) < 0.08 and abs(tl[1] - tr[1]) < 3 and abs(tl[0] - bl[0]) < 3:
-                    return tl[0] - (MARKER - 1) / 2 * sx, tl[1] - (MARKER - 1) / 2 * sy, sx, sy
-    raise ValueError("Индикатор не найден. Включите /wca companion и выделите его вместе с тремя цветными углами.")
+                sy = (bl[1] - tl[1]) / (HEIGHT - MARKER)
+                if not (0.45 < sy < 4 and abs(sx - sy) < 0.08 and abs(tl[0] - bl[0]) < 3):
+                    continue
+                geometry = tl[0] - (MARKER - 1) / 2 * sx, tl[1] - (MARKER - 1) / 2 * sy, sx, sy
+                try:
+                    read_frame(image, geometry)
+                    return geometry
+                except ValueError:
+                    attempts += 1
+                    if attempts >= 256:
+                        raise ValueError("Сигнал аддона пока не распознан")
+    raise ValueError("Ожидаю игру и диалог квеста")
 
 
 def read_frame(image, geometry: tuple) -> bytes:

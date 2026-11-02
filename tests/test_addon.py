@@ -15,7 +15,7 @@ class AddonTests(unittest.TestCase):
     def setUp(self):
         self.lua = LuaRuntime(unpack_returned_tuples=True)
         self.lua.execute((ROOT / "tests" / "wow_mock.lua").read_text())
-        self.lua.execute("namespace = {}")
+        self.lua.execute("namespace = {}; WarcraftAudiDB = {settings={companion=false, companionSetupVersion=1}}")
         self.load_addon()
 
     def load_addon(self):
@@ -29,6 +29,19 @@ class AddonTests(unittest.TestCase):
 
     def register_voice(self):
         self.run_lua('assert(WarcraftAudi:RegisterPack("Test", {{questID=42, locale="ruRU", stage="detail", files={"a.ogg", "b.ogg"}}}))')
+
+    def test_companion_is_automatic_for_new_install_and_old_settings_migrate_once(self):
+        self.run_lua('WarcraftAudiDB = nil')
+        self.load_addon()
+        self.run_lua('assert(WarcraftAudiDB.settings.companion); fire("QUEST_DETAIL"); assert(#mock.calls == 0); assert(WarcraftAudi.bridge.visible); assert(not WarcraftAudi.panel.visible); SlashCmdList.WARCRAFTAUDI("companion"); assert(not WarcraftAudiDB.settings.companion)')
+        self.load_addon()
+        self.run_lua('assert(not WarcraftAudiDB.settings.companion)')
+        self.run_lua('WarcraftAudiDB.settings.companionSetupVersion = nil')
+        self.load_addon()
+        self.run_lua('assert(WarcraftAudiDB.settings.companion); assert(WarcraftAudiDB.settings.companionSetupVersion == 1)')
+
+    def test_bridge_does_not_expire_mid_quest_and_hides_after_stop(self):
+        self.run_lua('SlashCmdList.WARCRAFTAUDI("companion"); fire("QUEST_DETAIL"); local b=WarcraftAudi.bridge; b.scripts.OnUpdate(b,5); assert(b.visible); fire("QUEST_FINISHED"); assert(b.visible); b.scripts.OnUpdate(b,1.3); assert(not b.visible)')
 
     def test_collect_all_three_stages_and_valid_unicode_export(self):
         self.run_lua('mock.text = "|cffffffffПривет|r, \\\"герой\\\"!\\n\\tПуть: C:\\\\test"; fire("QUEST_DETAIL"); fire("QUEST_PROGRESS"); fire("QUEST_COMPLETE")')

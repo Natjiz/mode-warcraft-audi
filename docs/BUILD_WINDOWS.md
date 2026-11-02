@@ -1,35 +1,34 @@
-# Сборка переносимого Windows-клиента
+# Сборка Windows 0.5.0
 
-Сборка выполнялась в Linux. Для подготовки ZIP не нужна Windows-компиляция:
-используются официальный embeddable CPython x64 и готовые Windows wheels.
-Сам Windows-запуск этим не подтверждается, его проверяют на целевой машине.
+В комплект входят официальный CPython 3.12.10 embed x64, пять Windows wheels,
+Python-код, Lua-аддон и собственный маленький Win32 launcher. Его исходник —
+`tools/windows_launcher.c`; он использует только KERNEL32/USER32 и не требует
+отдельного C runtime. Launcher не подписан; подпись CPython не является
+подписью всего приложения.
 
-Рабочая директория — корень репозитория. Пример подготовки:
+Подготовьте vendor как в предыдущей версии: скачайте Python embed и .sigstore
+с https://www.python.org/ftp/python/3.12.10/, Windows wheels через `pip download
+--platform win_amd64 --python-version 3.12 --implementation cp --abi cp312
+--only-binary=:all: -r companion/requirements.txt`. Нужен `sigstore==4.0.0`.
+
+Также нужен Zig 0.14.1: скачайте с https://ziglang.org/download/ и проверьте SHA-256
+по официальному https://ziglang.org/download/index.json. В облачной машине:
 
 ```sh
-python3 -m venv /workspace/.wca-packaging-venv
-/workspace/.wca-packaging-venv/bin/python -m pip install sigstore==4.0.0
-mkdir -p /workspace/.wca-windows-build/wheels
-/workspace/.wca-packaging-venv/bin/python -m pip download \
-  --dest /workspace/.wca-windows-build/wheels \
-  --platform win_amd64 --python-version 3.12 --implementation cp --abi cp312 \
-  --only-binary=:all: -r companion/requirements.txt
-curl -fL https://www.python.org/ftp/python/3.12.10/python-3.12.10-embed-amd64.zip \
-  -o /workspace/.wca-windows-build/python-3.12.10-embed-amd64.zip
-curl -fL https://www.python.org/ftp/python/3.12.10/python-3.12.10-embed-amd64.zip.sigstore \
-  -o /workspace/.wca-windows-build/python-3.12.10-embed-amd64.zip.sigstore
-/workspace/.wca-packaging-venv/bin/python tools/build_companion_windows.py
+XDG_CACHE_HOME=/workspace/.wca-packaging-cache \
+XDG_DATA_HOME=/workspace/.wca-packaging-data \
+ZIG_GLOBAL_CACHE_DIR=/workspace/.wca-toolchain/cache \
+/workspace/.wca-packaging-venv/bin/python tools/build_companion_windows.py \
+  --zig /workspace/.wca-toolchain/zig-x86_64-linux-0.14.1/zig \
+  --output downloads/WarcraftAudi-0.5.0-Windows.zip
 ```
 
-Сборщик проверяет SHA-256 архива и Sigstore-подпись `thomas@python.org`
-с issuer `https://accounts.google.com`. Личность сверена с официальной
-[страницей Python о Sigstore](https://www.python.org/downloads/metadata/sigstore/).
-Хеш CPython указан в подписанном bundle и официальном SPDX:
-`4acbed6dd1c744b0376e3b1cf57ce906f9dc9e95e68824584c8099a63025a3c3`.
-Windows wheels отдельно сверяются с SHA-256 PyPI. Проверка TLS, подписи и
-контрольных сумм не отключается. Все лицензии из vendor-пакетов сохраняются.
+Сборщик проверяет подписанный SHA CPython и Sigstore identity `thomas@python.org`
+с issuer `https://accounts.google.com`, затем сверяет wheels с SHA-256 PyPI.
+TLS, подписи и контрольные суммы не отключаются. Все vendor-лицензии сохраняются.
+`VENDOR.json` включает хеши launcher и его исходника.
 
-Результат: `dist/WarcraftAudi-Companion-0.4.0-Windows.zip`.
-В нём `Start.bat`, код программы, небольшой каталог и основной Lua-аддон.
-Голосовые модели и звуковая библиотека не включаются. `VENDOR.json` описывает
-версии и проверенные хеши. Реальный звук скачивается клиентом по необходимости.
+Результат — переносимый ZIP: `WarcraftAudi.exe`, диагностический `Start.bat`,
+`runtime`, `companion`, `AddOns/WarcraftAudi`, инструкция. Озвучки скачиваются
+при необходимости, моделей в комплекте нет. Настоящее окно и захват Windows
+проверяются отдельным workflow, работа с настоящим WoW требует проверки в игре.

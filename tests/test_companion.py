@@ -63,7 +63,7 @@ class ProtocolTests(unittest.TestCase):
         lua.execute("namespace = {}")
         for name in ("Core.lua", "UI.lua", "Bridge.lua"):
             lua.execute("return function(...)\n" + (ROOT / "addon/WarcraftAudi" / name).read_text() + "\nend")("WarcraftAudi", lua.globals().namespace)
-        lua.execute('fire("ADDON_LOADED", "WarcraftAudi"); SlashCmdList.WARCRAFTAUDI("companion"); mock.text = string.rep("Привет, путник! ", 60); fire("QUEST_DETAIL")')
+        lua.execute('fire("ADDON_LOADED", "WarcraftAudi"); mock.text = string.rep("Привет, путник! ", 60); fire("QUEST_DETAIL")')
         bridge = lua.globals().WarcraftAudi.bridge
         reader = Assembler()
         completed = None
@@ -134,6 +134,7 @@ class ServiceTests(unittest.TestCase):
         packet = frame_packet(json.dumps({"v": 1, "action": "demo"}).encode(), 7, 1, 0)
         image = render_frame(packet)
         class Screen:
+            monitors = [{"left":0,"top":0,"width":WIDTH,"height":HEIGHT}]
             def __enter__(self): return self
             def __exit__(self, *args): pass
             def grab(self, region):
@@ -143,9 +144,8 @@ class ServiceTests(unittest.TestCase):
             volume = 1
             def stop(self): pass
         with tempfile.TemporaryDirectory() as directory, patch('mss.mss', Screen):
-            app = DesktopApp(Path(directory), Player())
+            app = DesktopApp(Path(directory), Player(), auto_start=False)
             try:
-                app.config.update(region={"left":0,"top":0,"width":WIDTH,"height":HEIGHT}, geometry=list(find_geometry(image)))
                 with patch.object(app.controller, 'handle') as handle:
                     app.command('start', {})
                     self.assertTrue(captured.wait(2))
@@ -154,28 +154,6 @@ class ServiceTests(unittest.TestCase):
                     handle.assert_not_called()
             finally:
                 release.set(); app.close()
-
-    def test_ui_requires_session_token_and_rejects_foreign_origin(self):
-        from companion.warcraft_audi.app import DesktopApp, make_ui
-        import urllib.request, urllib.error
-        class Player:
-            volume = 1
-            def stop(self): pass
-        with tempfile.TemporaryDirectory() as directory:
-            app = DesktopApp(Path(directory), Player())
-            server = make_ui(app)
-            thread = threading.Thread(target=server.serve_forever, daemon=True); thread.start()
-            url = f"http://127.0.0.1:{server.server_port}"
-            try:
-                for headers in ({}, {"X-WCA-Token": app.ui_token, "Origin": "https://example.com"}):
-                    with self.assertRaises(urllib.error.HTTPError) as error:
-                        urllib.request.urlopen(urllib.request.Request(url + "/api/capture", headers=headers))
-                    self.assertEqual(error.exception.code, 403)
-                with urllib.request.urlopen(urllib.request.Request(url + "/api/state", headers={"X-WCA-Token": app.ui_token})) as response:
-                    self.assertEqual(response.status, 200)
-                    self.assertNotIn("server_token", json.load(response)["config"])
-            finally:
-                server.shutdown(); server.server_close(); app.close(); thread.join()
 
     def test_real_http_queue_singleflight_cache_and_auth(self):
         class Engine:

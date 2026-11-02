@@ -160,7 +160,7 @@ class Controller:
         self.executor = ThreadPoolExecutor(max_workers=2, thread_name_prefix="audio-fetch")
         self.lock, self.cancelled = threading.RLock(), threading.Event()
         self.epoch, self.pinned, self.future = 0, None, None
-        self.state = {"phase": "idle", "message": "Выделите индикатор аддона и нажмите «Запустить»", "quest": ""}
+        self.state = {"phase": "idle", "message": "Ожидаю игру и диалог квеста", "quest": ""}
 
     def status(self, message, phase=None):
         with self.lock:

@@ -6,12 +6,11 @@ bridge:SetSize(208, 112)
 bridge:SetPoint("TOPLEFT", UIParent, "TOPLEFT", 12, -12)
 bridge:SetFrameStrata("TOOLTIP")
 bridge:SetClampedToScreen(true)
-bridge:SetMovable(true)
-bridge:EnableMouse(true)
-bridge:RegisterForDrag("LeftButton")
-bridge:SetScript("OnDragStart", bridge.StartMoving)
-bridge:SetScript("OnDragStop", bridge.StopMovingOrSizing)
-if UIParent.GetEffectiveScale then bridge:SetScale(1 / UIParent:GetEffectiveScale()) end
+bridge:EnableMouse(false)
+local function placeBridge()
+    if UIParent.GetEffectiveScale then bridge:SetScale(0.75 / UIParent:GetEffectiveScale()) end
+end
+placeBridge()
 local background = bridge:CreateTexture(nil, "BACKGROUND")
 background:SetAllPoints()
 background:SetColorTexture(0, 0, 0, 1)
@@ -72,11 +71,16 @@ function bridge:Send(message)
     self.count = math.max(1, math.ceil(#message / 232))
     self.sequence = (self.sequence + 1) % 4294967296
     self.page, self.elapsed = 0, 0
+    self.idleTime = 0
     self:Draw()
     self:Show()
     return true
 end
 bridge:SetScript("OnUpdate", function(self, elapsed)
+    if self.hideWhenIdle then
+        self.idleTime = (self.idleTime or 0) + elapsed
+        if self.idleTime > 1.2 then self:Hide(); return end
+    end
     self.elapsed = self.elapsed + elapsed
     if self.elapsed < 0.12 or not self.message then return end
     self.elapsed = 0
@@ -86,6 +90,7 @@ end)
 
 function A:BridgeEvent(action)
     if not self.db or not self.db.settings.companion then return end
+    bridge.hideWhenIdle = action == "stop"
     local fields = { '"v":1', '"action":' .. self.JSONQuote(action) }
     if self.current and action ~= "stop" and action ~= "demo" then
         for _, key in ipairs({ "quest_id", "stage", "locale", "gender", "text", "speaker", "npc_id", "npc_race", "npc_type", "npc_gender", "player_name" }) do
@@ -104,10 +109,13 @@ function A:ToggleCompanion()
     self:Stop()
     self.db.settings.companion = not self.db.settings.companion
     if self.db.settings.companion then self:BridgeEvent("stop") else bridge:Hide() end
-    self:Notify("Внешняя программа: " .. (self.db.settings.companion and "включена. Выделите цветной индикатор в программе." or "выключена"))
+    self:Notify("Внешняя программа: " .. (self.db.settings.companion and "включена. Подключение автоматическое." or "выключена"))
     self:Refresh()
 end
-bridge:RegisterEvent("PLAYER_LOGIN")
-bridge:SetScript("OnEvent", function()
-    if A.db and A.db.settings.companion then A:BridgeEvent("stop") end
+for _, event in ipairs({ "PLAYER_LOGIN", "UI_SCALE_CHANGED", "DISPLAY_SIZE_CHANGED" }) do
+    bridge:RegisterEvent(event)
+end
+bridge:SetScript("OnEvent", function(_, event)
+    placeBridge()
+    if event == "PLAYER_LOGIN" and A.db and A.db.settings.companion then A:BridgeEvent("stop") end
 end)

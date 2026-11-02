@@ -1,6 +1,6 @@
 local addonName, A = ...
 WarcraftAudi = A
-A.version = "0.4.0"
+A.version = "0.5.0"
 A.voices = {}
 local stages = { QUEST_DETAIL = "detail", QUEST_PROGRESS = "progress", QUEST_COMPLETE = "complete" }
 local getters = { detail = GetQuestText, progress = GetProgressText, complete = GetRewardText }
@@ -144,7 +144,7 @@ function A:OnQuest(stage)
     end
     self.status = self:GetVoice() and "Запись найдена" or "Записи пока нет"
     self:Refresh()
-    if self.panel then self.panel:Show() end
+    if self.panel and not self.db.settings.companion then self.panel:Show() end
     if self.db.settings.autoPlay then self:Play()
     elseif self.db.settings.companion and self.BridgeEvent then self:BridgeEvent("select") end
 end
@@ -179,7 +179,7 @@ function A:ReadSelectedQuest(loaded)
         locale = locale, stage = "detail", text = text, title = clean(C_QuestLog.GetTitleForQuestID(questID)),
         speaker = "Рассказчик", npc_id = 0, npc_race = "", npc_type = "", npc_gender = "unknown",
         gender = UnitSex("player") == 3 and "female" or "male", player_name = UnitName("player") }
-    if self.panel then self.panel:Show() end
+    if self.panel and not self.db.settings.companion then self.panel:Show() end
     self:Play()
 end
 
@@ -227,6 +227,11 @@ frame:SetScript("OnEvent", function(_, event, name, success)
         A.db.collected = A.db.collected or {}
         if A.db.settings.autoPlay == nil then A.db.settings.autoPlay = true end
         if A.db.settings.collect == nil then A.db.settings.collect = true end
+        -- One-time migration: the desktop bundle works without a slash command.
+        if A.db.settings.companionSetupVersion ~= 1 then
+            A.db.settings.companion = true
+            A.db.settings.companionSetupVersion = 1
+        end
         A.db.schemaVersion = 1
         A:Refresh()
     elseif event == "QUEST_DATA_LOAD_RESULT" and A.pendingQuest == name then
