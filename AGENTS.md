@@ -45,3 +45,7 @@ and does not forward HF credentials from the player's machine. Preserve the
 shared library, cache policy revision, per-NPC references and register checks;
 reject unsuitable/truncated takes instead of publishing them or pitch-shifting
 a bass into the approved Kiro voice. HF deployment requires a connected account.
+
+When rendering or acoustic-check semantics change, bump the engine algorithm
+revision. Use the deploy tool's generated service policy fingerprint for cache
+invalidation when references change; keep unrelated NPC server recordings reusable.

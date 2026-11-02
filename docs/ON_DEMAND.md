@@ -109,3 +109,11 @@ python tests/space_smoke.py --engine qwen --synthetic-profile vulpera --output d
 Загрузка в настоящий HF dataset и настоящее выделение ZeroGPU ещё не проверены:
 для этого нет настроенной HF-авторизации. Локальные тесты проверяют постоянную
 библиотеку на диске, а не подменяют результатом тест облачного хранилища.
+
+Проверки сборки 0.6.0 прошли:
+[Windows: unit, настоящее окно/захват и готовый EXE](https://github.com/Natjiz/mode-warcraft-audi/actions/runs/41548315137),
+[Gradio API и пакет сервиса на CPU](https://github.com/Natjiz/mode-warcraft-audi/actions/runs/41548315138).
+Локально — 71 тест без пропусков; Windows — 70 успешных, 1 пропуск FFmpeg-кодировщика.
+Отдельно здесь проверены настоящий Qwen-синтез Киро и синтетического NPC.
+Отчёт с SHA архивов: `downloads/WarcraftAudi-0.6.0-validation.json`.
+Эти результаты не означают размещение или проверку настоящего ZeroGPU.

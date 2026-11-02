@@ -1,0 +1,102 @@
+{
+  "version": "0.6.0",
+  "generation_service_active": false,
+  "blocked_on": "No configured Hugging Face publishing account; hosted ZeroGPU and real dataset writes are not tested.",
+  "artifacts": {
+    "WarcraftAudi-0.6.0-Windows.zip": {
+      "size_bytes": 18729841,
+      "sha256": "08b28e6d50da3e23f94c83cdb34e22e65161c75d11d19f4ebd4900fdc77cae26"
+    },
+    "WarcraftAudi-ZeroGPU-0.6.0.zip": {
+      "size_bytes": 371708,
+      "sha256": "a1160d2df05e9aed9b7b7c5ecde58bd7d382053e3296a14a003f5f970eefa137"
+    }
+  },
+  "local_unit_tests": "71 passed, no skips",
+  "actual_cpu_speech": [
+    {
+      "engine": "qwen",
+      "torch": "2.8.0+cpu",
+      "gradio": "6.16.0",
+      "device": "cpu",
+      "quest_id": 48314,
+      "stage": "progress",
+      "synthetic_profile": null,
+      "voice": {
+        "version": "kiro-light-candidate-0.4.2",
+        "approved": true
+      },
+      "generation_calls": 1,
+      "elapsed_seconds": 42.97,
+      "verified": [
+        "actual Gradio SSE API",
+        "desktop checksum/download/cache",
+        "shared recording reused by second client",
+        "shared recording reused after library restart",
+        "FFmpeg full decode"
+      ],
+      "limits": [
+        "No hosted Hugging Face Space or real ZeroGPU allocation tested.",
+        "No real WoW or physical playback tested."
+      ],
+      "audio_sha256": "478a5a0d7ae39a3b7a323b12c3d2e6f30286e6cd11ed3b4c5c3b027392ecb956",
+      "audio_duration_seconds": 2.87
+    },
+    {
+      "engine": "qwen",
+      "torch": "2.8.0+cpu",
+      "gradio": "6.16.0",
+      "device": "cpu",
+      "quest_id": 900000001,
+      "stage": "progress",
+      "synthetic_profile": "vulpera",
+      "voice": {
+        "version": "3aa00da64bf4aa4cd8b94b8f06d38305249344f344dafaf7fb8e7ba102236e24",
+        "approved": false,
+        "profile": "vulpera",
+        "status": "species-informed candidate"
+      },
+      "generation_calls": 1,
+      "elapsed_seconds": 118.37,
+      "verified": [
+        "actual Gradio SSE API",
+        "desktop checksum/download/cache",
+        "shared recording reused by second client",
+        "shared recording reused after library restart",
+        "FFmpeg full decode"
+      ],
+      "limits": [
+        "No hosted Hugging Face Space or real ZeroGPU allocation tested.",
+        "No real WoW or physical playback tested."
+      ],
+      "audio_sha256": "3028aaf2e2a6d7e3c9fe0ae5c125901db409cc9adb721fbc036031b078894ece",
+      "audio_duration_seconds": 3.3
+    }
+  ],
+  "voice_register_check": {
+    "approved_kiro_reference_median_hz": 222.6,
+    "new_48314_progress_median_hz": 226.4,
+    "note": "Acoustic screening only; not an artistic approval of every generated line."
+  },
+  "client_access": "Anonymous by default; 2 GPU minutes/day under current ZeroGPU terms, no user HF token forwarded.",
+  "limits": [
+    "Hosted ZeroGPU allocation and real Hub dataset publishing need a connected eligible account.",
+    "Current endpoint manifest remains disabled.",
+    "New NPC voices are candidates until assessed.",
+    "Actual WoW and physical audio are not part of automated checks."
+  ],
+  "ci": {
+    "windows": {
+      "status": "success",
+      "url": "https://github.com/Natjiz/mode-warcraft-audi/actions/runs/41548315137",
+      "unit_tests": "70 passed, 1 skipped (FFmpeg encoder; Linux check passed)",
+      "native_window_and_capture": "passed",
+      "packaged_exe_and_runtime": "passed"
+    },
+    "gradio_cpu_adapter": {
+      "status": "success",
+      "url": "https://github.com/Natjiz/mode-warcraft-audi/actions/runs/41548315138",
+      "scope": "Real Gradio HTTP/SSE and durable local library; fixture audio, no ZeroGPU allocation"
+    }
+  }
+}
