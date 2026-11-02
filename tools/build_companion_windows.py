@@ -20,12 +20,13 @@ import zipfile
 ROOT = Path(__file__).resolve().parents[1]
 PYTHON_FILE = "python-3.12.10-embed-amd64.zip"
 PYTHON_SHA = "4acbed6dd1c744b0376e3b1cf57ce906f9dc9e95e68824584c8099a63025a3c3"
-README = """Warcraft Audi 0.5.0 — Windows 10/11 x64
+README = """Warcraft Audi 0.6.0 — Windows 10/11 x64
 
 Обновление / первая установка:
 1. Полностью распакуйте архив в обычную папку на компьютере.
 2. При закрытой игре скопируйте AddOns/WarcraftAudi в Interface/AddOns
    вашего WoW Circle 10.2.7, заменив основной аддон.
+   Если уже установлен аддон 0.5.0, повторно менять его не нужно.
 3. Откройте WarcraftAudi.exe, запустите игру и откройте квест у NPC.
 
 Браузер не нужен. Подключение начинается автоматически. Выделять области,
@@ -38,9 +39,11 @@ README = """Warcraft Audi 0.5.0 — Windows 10/11 x64
 его другими окнами: это канал передачи текста из обычного WoW-аддона.
 После перемещения игры, смены монитора или масштаба программа ищет его сама.
 
-Без сервера доступны опубликованные записи Акунды и «Природного лекарства»
+Сервис генерации подключается автоматически после публикации его адреса
+в каталоге проекта. Пока он не активирован, доступны опубликованные записи
+Акунды и «Природного лекарства»
 от Киро. Новые неизвестные квесты требуют работающего сервера генерации;
-публичный сервер пока не развёрнут. Настройки сервера, громкости и кэша
+публичный сервис ZeroGPU пока не развёрнут. Настройки сервера, громкости и кэша
 открываются кнопкой «Настройки», для готовых записей менять их не нужно.
 Голоса Акунды и Киро утверждены пользователем и закреплены за этими NPC.
 
@@ -136,7 +139,7 @@ def build(vendor: Path, output: Path, zig: Path):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--vendor", type=Path, default=Path("/workspace/.wca-windows-build"))
-    parser.add_argument("--output", type=Path, default=ROOT / "dist/WarcraftAudi-0.5.0-Windows.zip")
+    parser.add_argument("--output", type=Path, default=ROOT / "dist/WarcraftAudi-0.6.0-Windows.zip")
     parser.add_argument("--zig", type=Path, required=True)
     arguments = parser.parse_args()
     build(arguments.vendor, arguments.output, arguments.zig)

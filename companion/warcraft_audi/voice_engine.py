@@ -8,6 +8,9 @@ import re
 import subprocess
 import tempfile
 
+from .voice_profiles import profile_for, reference_key
+from .voice_quality import median_pitch, limits_for, within
+
 
 def file_hash(path):
     digest = hashlib.sha256()
@@ -18,13 +21,14 @@ def file_hash(path):
 
 
 class QwenEngine:
-    def __init__(self, models: Path, voices: Path):
+    def __init__(self, models: Path, voices: Path, *, device=None, keep_models=False):
+        self.device, self.keep_models = device, keep_models
         self.models, self.voices = Path(models), Path(voices)
         self.repo = self.voices.resolve().parent
         self.manifest = json.loads((self.voices / "models.json").read_text())
         cards = sorted((self.voices / "npcs").glob("*.json"))
-        self.revision = hashlib.sha256(b"qwen-npc-clone-v1" + (self.voices / "models.json").read_bytes() + b"".join(p.read_bytes() for p in cards)).hexdigest()
-        self.loaded, self.prompts = {}, {}
+        self.revision = hashlib.sha256(b"qwen-npc-clone-v3" + (self.voices / "models.json").read_bytes() + b"".join(p.read_bytes() for p in cards)).hexdigest()
+        self.loaded, self.prompts, self.pitch_cache = {}, {}, {}
 
     def _load(self, kind):
         if kind in self.loaded:
@@ -33,7 +37,7 @@ class QwenEngine:
         from qwen_tts import Qwen3TTSModel
         # Keep only one large speech model resident; NPC reference prompts are small.
         for other in list(self.loaded):
-            if other != kind:
+            if other != kind and not self.keep_models:
                 del self.loaded[other]
         import gc
         gc.collect()
@@ -45,10 +49,33 @@ class QwenEngine:
             if file_hash(root / relative) != expected:
                 raise ValueError("Speech model integrity check failed")
         torch.set_num_threads(4)
-        device = "cuda:0" if torch.cuda.is_available() else "cpu"
+        device = self.device or ("cuda:0" if torch.cuda.is_available() else "cpu")
         self.loaded[kind] = Qwen3TTSModel.from_pretrained(str(root), device_map=device,
             dtype=torch.bfloat16, attn_implementation="sdpa", local_files_only=True)
         return self.loaded[kind]
+
+    def revision_for(self, request):
+        card = self.voices / 'npcs' / f"{request['npc_id']}.json"
+        if request['npc_id'] and card.is_file():
+            info = json.loads(card.read_text(encoding='utf-8'))
+            voice = (info['voice_version'], info['reference_sha256'])
+        else:
+            voice = (profile_for(request)['revision'], reference_key(request))
+        return hashlib.sha256(json.dumps({'engine':'qwen-clone-v3','models':self.manifest,'voice':voice},sort_keys=True).encode()).hexdigest()
+
+    def reference_files(self, request):
+        if request['npc_id'] and (self.voices / 'npcs' / f"{request['npc_id']}.json").is_file():
+            return []
+        key = reference_key(request)
+        return [self.voices / 'generated' / (key + suffix) for suffix in ('.wav','.json')]
+
+    def voice_info(self, request):
+        card = self.voices / 'npcs' / f"{request['npc_id']}.json"
+        if request['npc_id'] and card.is_file():
+            info = json.loads(card.read_text(encoding='utf-8'))
+            return {'version':info['voice_version'],'approved':bool(info.get('approved'))}
+        profile = profile_for(request)
+        return {'version':reference_key(request),'approved':False,'profile':profile['id'],'status':profile['status']}
 
     def _reference(self, request):
         import soundfile as sf
@@ -60,11 +87,11 @@ class QwenEngine:
             if not path.is_relative_to(self.repo) or file_hash(path) != card["reference_sha256"]:
                 raise ValueError("NPC reference integrity check failed")
             return path, card["reference_text"], card["voice_version"]
-        # The available race/type metadata is a starting point, not a visual diagnosis.
-        identity = str(npc) if npc else request["speaker"] + ":" + request["npc_type"] + ":" + request["npc_gender"]
-        key = hashlib.sha256(identity.encode()).hexdigest()
+        # Missing appearance data stays explicitly unconfirmed, never a default monster bass.
+        profile = profile_for(request)
+        key = reference_key(request)
         directory = self.voices / "generated"
-        directory.mkdir(exist_ok=True)
+        directory.mkdir(parents=True, exist_ok=True)
         path, metadata = directory / (key + ".wav"), directory / (key + ".json")
         if path.exists() and metadata.exists():
             card = json.loads(metadata.read_text(encoding="utf-8"))
@@ -72,24 +99,29 @@ class QwenEngine:
                 raise ValueError("Generated NPC reference integrity check failed")
             return path, card["text"], key
         model = self._load("design")
-        text = request["text"][:180].rsplit(" ", 1)[0] if len(request["text"]) > 180 else request["text"]
-        description = f"A {request['npc_gender']} fantasy NPC. Species or race: {request['npc_race'] or request['npc_type'] or 'unspecified humanoid'}."
-        instruction = description + " A natural character voice suited to this species, native Russian diction, clear words, calm conversational delivery, dry recording without music or echoes."
+        text = "Я помогу тебе. Послушай внимательно, и мы разберёмся, что нужно делать дальше."
+        instruction = profile['instruction']
         import torch
         import numpy as np
-        torch.manual_seed(int(key[:8], 16))
-        steps = {"count": 0}
-        def count_reference(module, args, output):
-            steps["count"] += 1
-        hook = model.model.talker.register_forward_hook(count_reference)
-        try:
-            waves, rate = model.generate_voice_design(text=text, language="Russian", instruct=instruction, max_new_tokens=600)
-        finally:
-            hook.remove()
-        if steps["count"] >= 600 or not np.isfinite(waves[0]).all() or len(waves[0]) < rate or np.max(np.abs(waves[0])) < 0.001:
-            raise ValueError("Invalid or truncated NPC reference")
+        for attempt in range(2):
+            torch.manual_seed(int(key[:8], 16)+attempt)
+            steps = {"count": 0}
+            def count_reference(module, args, output):
+                steps["count"] += 1
+            hook = model.model.talker.register_forward_hook(count_reference)
+            try:
+                waves, rate = model.generate_voice_design(text=text, language="Russian", instruct=instruction,
+                    max_new_tokens=240,non_streaming_mode=True,do_sample=True,temperature=.8,top_p=.9)
+            finally:
+                hook.remove()
+            valid=steps['count']<240 and np.isfinite(waves[0]).all() and len(waves[0])>=rate and np.max(np.abs(waves[0]))>=.001
+            pitch=median_pitch(waves[0],rate) if valid else None
+            if valid and within(pitch,limits_for(profile)):
+                break
+        else:
+            raise ValueError('Could not create an untruncated species-appropriate reference voice')
         sf.write(path, waves[0], rate, subtype="PCM_16")
-        metadata.write_text(json.dumps({"text": text, "description": description, "sha256": file_hash(path),
+        metadata.write_text(json.dumps({"text": text, "profile": profile, "pitch_hz":pitch, "sha256": file_hash(path),
                                        "status": "automatic candidate; appearance and voice need review"}, ensure_ascii=False, indent=2), encoding="utf-8")
         return path, text, key
 
@@ -106,27 +138,36 @@ class QwenEngine:
                 oldest = next(iter(self.prompts))
                 if oldest != voice:
                     self.prompts.pop(oldest)
+        import torch
+        profile=profile_for(request)
+        if voice not in self.pitch_cache:
+            reference_audio,reference_rate=sf.read(reference)
+            self.pitch_cache[voice]=median_pitch(reference_audio,reference_rate)
+        limits=limits_for(profile,self.pitch_cache[voice])
+        seed=135156 if request['npc_id']==135154 else int(hashlib.sha256(voice.encode()).hexdigest()[:8],16)
         # Bound generation size, preserving words and sentences rather than dropping text.
         import textwrap
         chunks = textwrap.wrap(request["text"], width=280, break_long_words=False, break_on_hyphens=False)
         parts, rate = [], None
         for chunk in chunks:
-            calls = {"count": 0}
-
-            def count_steps(module, args, output):
-                calls["count"] += 1
-
-            hook = model.model.talker.register_forward_hook(count_steps)
-            try:
-                waves, rate = model.generate_voice_clone(text=chunk, language="Russian", voice_clone_prompt=self.prompts[voice],
-                    max_new_tokens=768, do_sample=True, temperature=0.75, top_p=0.9)
-            finally:
-                hook.remove()
-            if calls["count"] >= 768:
-                raise ValueError("Speech generation reached its length limit")
-            audio = np.asarray(waves[0])
-            if not np.isfinite(audio).all() or len(audio) < 100 or np.max(np.abs(audio)) < 0.001:
-                raise ValueError("Invalid generated audio")
+            for attempt in range(3):
+                torch.manual_seed(seed+attempt)
+                calls = {"count": 0}
+                def count_steps(module, args, output):
+                    calls["count"] += 1
+                hook = model.model.talker.register_forward_hook(count_steps)
+                try:
+                    waves, rate = model.generate_voice_clone(text=chunk, language="Russian", voice_clone_prompt=self.prompts[voice],
+                        max_new_tokens=768, do_sample=True, temperature=0.75, top_p=0.9)
+                finally:
+                    hook.remove()
+                audio=np.asarray(waves[0])
+                valid=calls['count']<768 and np.isfinite(audio).all() and len(audio)>=100 and np.max(np.abs(audio))>=.001
+                pitch=median_pitch(audio,rate) if valid else None
+                if valid and within(pitch,limits):
+                    break
+            else:
+                raise ValueError('Generated speech drifted from the reference register or was truncated')
             parts.extend([audio, np.zeros(int(rate * 0.15), dtype=audio.dtype)])
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)

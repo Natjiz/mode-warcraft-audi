@@ -10,6 +10,7 @@ import threading
 from .cache import AudioCache
 from .client import CatalogProvider, Controller, RemoteProvider
 from .capture import ScreenWatch
+from .space_client import AutomaticProvider
 
 
 class DesktopApp:
@@ -41,7 +42,7 @@ class DesktopApp:
     def provider(self):
         if self.config['server_url']:
             return RemoteProvider(self.cache, self.config['server_url'], self.server_token)
-        return CatalogProvider(self.cache, self.catalog)
+        return AutomaticProvider(self.cache, self.catalog)
 
     def save(self):
         temporary = self.config_path.with_suffix('.tmp')

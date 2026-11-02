@@ -1,0 +1,35 @@
+name: ZeroGPU adapter
+on:
+  push:
+    paths:
+      - 'space/**'
+      - 'space_runtime/**'
+      - 'companion/warcraft_audi/library.py'
+      - 'companion/warcraft_audi/space_client.py'
+      - 'companion/warcraft_audi/voice_*.py'
+      - 'tests/space_smoke.py'
+      - 'tools/package_space.py'
+      - '.github/workflows/space.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+env:
+  PYTHONUTF8: '1'
+  GRADIO_ANALYTICS_ENABLED: 'False'
+jobs:
+  gradio-api:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m pip install --index-url https://download.pytorch.org/whl/cpu torch==2.8.0+cpu torchaudio==2.8.0+cpu
+      - run: python -m pip install -r space/requirements.txt
+      - run: python -m pip check
+      - run: |
+          sudo apt-get update
+          sudo apt-get install -y ffmpeg
+      - run: python tests/space_smoke.py --engine fixture --output dist/space-ci-smoke
+      - run: python tools/package_space.py --output dist/WarcraftAudi-ZeroGPU-0.6.0.zip

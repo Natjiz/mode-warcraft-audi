@@ -13,6 +13,10 @@ from .protocol import canonical_request, request_key
 from .service import Catalog
 
 
+class RecordingMissing(ValueError):
+    pass
+
+
 class Cancelled(Exception):
     pass
 
@@ -43,7 +47,7 @@ class CatalogProvider:
             if previous:
                 status("Воспроизвожу сохранённую запись")
                 return previous
-            raise ValueError("Готовой записи пока нет. Подключите сервер генерации в настройках программы.")
+            raise RecordingMissing("Готовой записи пока нет. Подключите сервер генерации в настройках программы.")
         status("Скачиваю готовую запись")
         data, _ = fetch(entry["url"])
         if cancelled.is_set():

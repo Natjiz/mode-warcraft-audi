@@ -13,7 +13,7 @@ user.FindWindowW.argtypes,user.FindWindowW.restype=[w.LPCWSTR,w.LPCWSTR],w.HWND
 user.PostMessageW.argtypes=[w.HWND,w.UINT,w.WPARAM,w.LPARAM]
 with tempfile.TemporaryDirectory() as directory:
     root=Path(directory)/'Проверка Киро с пробелами'
-    with ZipFile('downloads/WarcraftAudi-0.5.0-Windows.zip') as archive:archive.extractall(root)
+    with ZipFile('downloads/WarcraftAudi-0.6.0-Windows.zip') as archive:archive.extractall(root)
     bundle=root/'WarcraftAudiCompanion'
     env={**os.environ,'LOCALAPPDATA':str(root/'data')}
     assert not user.FindWindowW('WarcraftAudiDesktop',None)

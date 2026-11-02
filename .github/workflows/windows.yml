@@ -6,7 +6,7 @@ on:
       - 'addon/**'
       - 'tests/**'
       - 'tools/windows_launcher.c'
-      - 'downloads/WarcraftAudi-0.5.0-Windows.zip'
+      - 'downloads/WarcraftAudi-0.6.0-Windows.zip'
       - '.github/workflows/windows.yml'
   workflow_dispatch:
 env:

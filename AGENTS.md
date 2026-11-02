@@ -34,3 +34,14 @@ automatically. Preserve automatic indicator discovery/recovery and addon mode
 migration. Do not bring selection, browser setup or a manual Start step back into
 the normal player flow. The optical signal is still required for the ordinary
 WoW addon; explain this limitation accurately and do not claim it was removed.
+
+# On-demand generation 0.6
+
+The Gradio/ZeroGPU adapter and native client integration are prepared.
+`companion/service.json` must stay disabled until a real hosted Space passes
+lookup, GPU generation, persistent storage and repeat-download checks. Local CPU
+checks are not a ZeroGPU deployment. The client defaults to anonymous/free use
+and does not forward HF credentials from the player's machine. Preserve the
+shared library, cache policy revision, per-NPC references and register checks;
+reject unsuitable/truncated takes instead of publishing them or pitch-shifting
+a bass into the approved Kiro voice. HF deployment requires a connected account.

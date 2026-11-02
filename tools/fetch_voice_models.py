@@ -14,12 +14,16 @@ def main():
     parser.add_argument("--root", type=Path, default=Path("/workspace/.warcraft-audi-models"))
     parser.add_argument("--kind", choices=("base", "design", "all"), default="all")
     args = parser.parse_args()
+    fetch(args.root, args.kind)
+
+
+def fetch(root: Path, kind_choice="all"):
     from huggingface_hub import snapshot_download
     manifest = json.loads((ROOT / "voices/models.json").read_text())
     for kind, entry in manifest.items():
-        if args.kind not in {"all", kind}:
+        if kind_choice not in {"all", kind}:
             continue
-        target = args.root / entry["directory"]
+        target = root / entry["directory"]
         missing = False
         for relative, expected in entry["weights"].items():
             path = target / relative
@@ -33,6 +37,7 @@ def main():
             if file_hash(target / relative) != expected:
                 raise ValueError(f"Checksum mismatch for {relative}")
         print(f"Verified {kind}: {entry['repo']} @ {entry['revision']}", flush=True)
+
 
 
 if __name__ == "__main__":

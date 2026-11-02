@@ -1,0 +1,6 @@
+{
+  "schema_version": 1,
+  "provider": "gradio-zerogpu",
+  "space_url": null,
+  "generation_revision": "qwen-clone-v3"
+}
